@@ -16,28 +16,24 @@
   <meta name="author" content="QinYU">
   <meta name="keywords" content="">
   
-    <meta name="description" content="深度学习——线性神经网络 线性回归的输出通常是预测目标的值，softmax回归的输出通常是预测目标的概率分布">
+    <meta name="description" content="记录一些配置ubuntu的命令，以便后续查找">
 <meta property="og:type" content="article">
-<meta property="og:title" content="线性神经网络">
-<meta property="og:url" content="http://qinyu.space/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E7%BA%BF%E6%80%A7%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/index.html">
+<meta property="og:title" content="ubuntu配置手册">
+<meta property="og:url" content="http://qinyu.space/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/ubuntu%E9%85%8D%E7%BD%AE%E6%89%8B%E5%86%8C/index.html">
 <meta property="og:site_name" content="QinYU">
-<meta property="og:description" content="深度学习——线性神经网络 线性回归的输出通常是预测目标的值，softmax回归的输出通常是预测目标的概率分布">
+<meta property="og:description" content="记录一些配置ubuntu的命令，以便后续查找">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://pic.qinyu.space/image/image-20231120165615396.png">
-<meta property="article:published_time" content="2023-12-03T05:13:10.000Z">
-<meta property="article:modified_time" content="2023-12-04T13:06:55.325Z">
+<meta property="article:published_time" content="2023-12-10T07:35:12.000Z">
+<meta property="article:modified_time" content="2023-12-22T07:41:59.980Z">
 <meta property="article:author" content="QinYU">
-<meta property="article:tag" content="线性回归">
-<meta property="article:tag" content="softmax回归">
-<meta property="article:tag" content="交叉熵">
+<meta property="article:tag" content="ubuntu">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://pic.qinyu.space/image/image-20231120165615396.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>线性神经网络 - QinYU</title>
+  <title>ubuntu配置手册 - QinYU</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -320,7 +316,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="线性神经网络"></span>
+            <span id="subtitle" data-typed-text="ubuntu配置手册"></span>
           
         </div>
 
@@ -331,8 +327,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-12-03 13:13" pubdate>
-          2023年12月3日 下午
+        <time datetime="2023-12-10 15:35" pubdate>
+          2023年12月10日 下午
         </time>
       </span>
     
@@ -343,7 +339,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.2k 字
+          404 字
         
       </span>
     
@@ -354,7 +350,7 @@
         
         
         
-          19 分钟
+          4 分钟
         
       </span>
     
@@ -485,116 +481,29 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">线性神经网络</h1>
+            <h1 id="seo-header">ubuntu配置手册</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="深度学习线性神经网络">深度学习——线性神经网络</h2>
-<p>线性回归的输出通常是预测目标的值，softmax回归的输出通常是预测目标的概率分布</p>
-<span id="more"></span>
-<h3 id="线性回归">1. 线性回归</h3>
+                <p>记录一些配置ubuntu的命令，以便后续查找</p>
+<h4 id="vmware安装vmtools">1. VMware安装vmtools</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo apt install open-vm-tools-desktop<br></code></pre></td></tr></table></figure>
+<p>重启后生效</p>
+<h4 id="pip换源">2. pip换源</h4>
+<p>在桌面打开终端</p>
 <ol type="1">
-<li><p>问题类型</p>
-<p>线性回归通常用于预测一个连续的目标变量，比如房价与房龄、面积的关系：</p>
-<p><span class="math display">\[
-\mathrm{price} = w_{\mathrm{area}} \cdot \mathrm{area} +
-w_{\mathrm{age}} \cdot \mathrm{age} + b.
-\]</span> 更为一般的会写成： <span class="math display">\[
-\hat{y} = w_1  x_1 + ... + w_d  x_d + b = \mathbf{w}^\top \mathbf{x} +
-b.
-\]</span></p></li>
-<li><p>输出层</p>
-<p>线性回归的的输出就是模型的原始预测值，比如输出的是5000就代表<span
-class="math inline">\(\mathrm{price}\)</span>是5000,一般不会再经过任何变换。</p></li>
-<li><p>损失函数</p>
-<p>线性回归的损失函数通常使用均方误差损失函数（Mean Squared
-Error，MSE）当样本<span class="math inline">\(i\)</span>的预测值为<span
-class="math inline">\(\hat{y}^{(i)}\)</span>，其相应的真实标签为<span
-class="math inline">\(y^{(i)}\)</span>时，平方误差可以定义为以下公式：
-<span class="math display">\[
-l^{(i)}(\mathbf{w}, b) = \frac{1}{2} \left(\hat{y}^{(i)} -
-y^{(i)}\right)^2.
-\]</span> 为了度量模型在整个数据集上的质量，我们需计算在训练集<span
-class="math inline">\(n\)</span>个样本上的损失均值 <span
-class="math display">\[
-L(\mathbf{w}, b) =\frac{1}{n}\sum_{i=1}^n l^{(i)}(\mathbf{w}, b)
-=\frac{1}{n} \sum_{i=1}^n \frac{1}{2}\left(\mathbf{w}^\top
-\mathbf{x}^{(i)} + b - y^{(i)}\right)^2.
-\]</span></p></li>
+<li><p>创建<code>.pip</code>文件夹</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> ~/.pip<br></code></pre></td></tr></table></figure></li>
+<li><p>创建<code>pip.conf</code>文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo gedit ~/.pip/pip.conf<br></code></pre></td></tr></table></figure></li>
+<li><p>将以下内容复制进<code>pip.conf</code>中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs conf">[global]<br>index-url = https://pypi.tuna.tsinghua.edu.cn/simple<br>index-index-url = https://mirrors.aliyun.com/pypi/simple/<br>[install]<br>trusted-host =<br>    pypi.tuna.tsinghua.edu.cn<br>    mirrors.aliyun.com<br></code></pre></td></tr></table></figure></li>
+<li><p>完成</p></li>
 </ol>
-<h3 id="mathrmsoftmax回归">2. <span
-class="math inline">\(\mathrm{softmax}\)</span>回归</h3>
-<ol type="1">
-<li><p>问题类型</p>
-<p>用于多类别分类问题，其中每个样本属于且仅属于一个类别。<span
-class="math inline">\(\mathrm{softmax}\)</span>
-回归通常用于处理分类问题，例如图像分类，手写数字识别等。</p></li>
-<li><p>输出层</p>
-<p>输出通常是模型对<strong>每个类别的预测概率分布</strong>。<span
-class="math inline">\(\mathrm{softmax}\)</span>回归的目标是将输入样本分类到多个类别中的一个，输出是一个概率分布，表示每个类别的概率。</p>
-<figure>
-<img src="https://pic.qinyu.space/image/image-20231120165615396.png" srcset="/img/loading.gif" lazyload
-alt="image-20231120165615396" />
-<figcaption aria-hidden="true">image-20231120165615396</figcaption>
-</figure></li>
-</ol>
-<p><span class="math display">\[
-\begin{aligned} \mathbf{O} &amp;= \mathbf{X} \mathbf{W} + \mathbf{b}, \\
-\hat{\mathbf{Y}} &amp; = \mathrm{softmax}(\mathbf{O}). \end{aligned}
-\]</span></p>
-<p>其中<span
-class="math inline">\(\mathbf{O}\)</span>是未规范化预测，<span
-class="math inline">\(\hat{\mathbf{Y}}\)</span>是预测的概率分布，输出层单元数与类别总数相同。</p>
-<ol start="3" type="1">
-<li><p>损失函数</p>
-<p>通常使用交叉熵损失函数（Cross-Entropy Loss），这里推荐一篇博客<a
-target="_blank" rel="noopener" href="https://blog.csdn.net/tsyccnh/article/details/79163834">【一文搞懂交叉熵在机器学习中的使用，透彻理解交叉熵背后的直觉】</a>，熵意味着不确定性，在物理学中熵越大，说明系统的混乱程度越大，而在这里交叉熵可以理解为实际的系统（概率分布）与预测的系统（预测的概率分布）之间的差距，因此适用于多类别分类问题。交叉熵损失通过比较模型输出的概率分布与实际标签的概率分布来衡量模型性能。
-<span class="math display">\[
-l(\mathbf{y}, \hat{\mathbf{y}}) = - \sum_{j=1}^q y_j \log \hat{y}_j.
-\]</span> <strong><span
-class="math inline">\(y_j\)</span>这里是实际的概率分布，在单分类问题中可以看成是某一类别的独热编码，而<span
-class="math inline">\(\hat{y}_j\)</span>是预测的概率分布，交叉熵是用来衡量两个概率分布之间的相似性或差异性的一种度量</strong>，交叉熵越大说明实际的概率分布和预测的概率分布的越大，通过梯度下降可以降低交叉熵损失函数值。</p>
-<p>举个例子，比如有一个猫、狗、人的<strong>单分类</strong>的图片分类器模型，标签对应的独热编码为：</p>
-<table>
-<thead>
-<tr class="header">
-<th>猫</th>
-<th>狗</th>
-<th>人</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><span class="math inline">\([1,0,0]\)</span></td>
-<td><span class="math inline">\([0,1,0]\)</span></td>
-<td><span class="math inline">\([0,0,1]\)</span></td>
-</tr>
-</tbody>
-</table>
-<p>由于是单分类问题，一张图片中只会有猫、狗、人中的某一种，不会出现猫和狗同时出现的情况，因此类别对应的独热编码就可以视为是实际的概率分布，比如有一张图片的标签为<span
-class="math inline">\([1,0,0]\)</span>，则可以确定这张图片实际为猫的概率为1，为狗、人的概率均为0。</p>
-<p>同样是这张图片，经过模型<span
-class="math inline">\(\mathrm{softmax}\)</span>之后预测的概率为<span
-class="math inline">\(\hat{y}_i=[0.5,0.4,0.1]\)</span>，即预测为猫、狗、人的概率分别为0.5、0.4、0.1，现在用交叉熵损失函数计算预测与实际的误差：
-<span class="math display">\[
-l= -1 \times \log 0.5-0 \times \log 0.4 - 0 \times \log 0.1 = 0.301
-\]</span> 再考虑两个极端情况</p>
-<ol type="1">
-<li><p>预测的概率为<span
-class="math inline">\(\hat{y}_i=[1,0,0]\)</span>，即完全预测正确</p>
-<p>交叉熵为： <span class="math display">\[
-l= -1 \times \log 1-0 \times \log 0 - 0 \times \log 0 = 0
-\]</span></p></li>
-<li><p>预测的概率为<span
-class="math inline">\(\hat{y}_i=[0,0.5,0.5]\)</span>，即完全预测错误</p>
-<p>交叉熵为： <span class="math display">\[
-l= -1 \times \log 0-0 \times \log 0.5 - 0 \times \log 0.5 = +\infty
-\]</span></p></li>
-</ol>
-<p>可见在完全预测正确的情况下交叉熵最小，完全预测错误的情况下交叉熵最大，即实际的概率分布和预测的概率分布的最大。</p>
-<p>因此交叉熵能很好的作为分类问题的损失函数。</p></li>
-</ol>
+<h4 id="更改文件夹权限">3. 更改文件夹权限</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo <span class="hljs-built_in">chmod</span> -R 777 /data<br></code></pre></td></tr></table></figure>
+<p><code>-R</code>表示会递归修改子文件夹下的文件权限</p>
 
                 
               </div>
@@ -635,16 +544,6 @@ l= -1 \times \log 0-0 \times \log 0.5 - 0 \times \log 0.5 = +\infty
 <span class="category-chains">
   
   
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="category-chain-item">深度学习</a>
-  
-  
-
-      </span>
-    
-  
 </span>
 
     </div>
@@ -653,11 +552,7 @@ l= -1 \times \log 0-0 \times \log 0.5 - 0 \times \log 0.5 = +\infty
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="print-no-link">#线性回归</a>
-      
-        <a href="/tags/softmax%E5%9B%9E%E5%BD%92/" class="print-no-link">#softmax回归</a>
-      
-        <a href="/tags/%E4%BA%A4%E5%8F%89%E7%86%B5/" class="print-no-link">#交叉熵</a>
+        <a href="/tags/ubuntu/" class="print-no-link">#ubuntu</a>
       
     </div>
   
@@ -669,8 +564,8 @@ l= -1 \times \log 0-0 \times \log 0.5 - 0 \times \log 0.5 = +\infty
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>线性神经网络</div>
-      <div>http://qinyu.space/深度学习/线性神经网络/</div>
+      <div>ubuntu配置手册</div>
+      <div>http://qinyu.space/环境配置/ubuntu配置手册/</div>
     </div>
     <div class="license-meta">
       
@@ -682,7 +577,7 @@ l= -1 \times \log 0-0 \times \log 0.5 - 0 \times \log 0.5 = +\infty
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年12月3日</div>
+          <div>2023年12月10日</div>
         </div>
       
       
@@ -715,23 +610,6 @@ l= -1 \times \log 0-0 \times \log 0.5 - 0 \times \log 0.5 = +\infty
 
 
 
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/%E5%88%A9%E7%94%A8cloudflare%E5%8A%A0%E9%80%9Fgithub%E4%B8%BB%E9%A1%B5%E8%AE%BF%E9%97%AE/" title="博客搭建（一）| 利用cloudflare加速github博客访问">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">博客搭建（一）| 利用cloudflare加速github博客访问</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                  </article>
-                </div>
               
             </div>
 

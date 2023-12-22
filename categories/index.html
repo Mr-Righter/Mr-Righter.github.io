@@ -58,11 +58,15 @@
 
 
 
+  
+<link rel="stylesheet" href="/css/reward.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"qinyu.space","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"❡"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":"G-1XHKDCG0YK"},"tencent":{"sid":null,"cid":null},"woyaola":21827805,"cnzz":null,"leancloud":{"app_id":"Mgc2jj2uZmdKVODXfj5LT8mt-MdYXbMMI","app_key":"3xZpYKXriWZv1kkJx3xvzmZV","server_url":"https://mgc2jj2u.api.lncldglobal.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"qinyu.space","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"❡"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":"G-1XHKDCG0YK"},"tencent":{"sid":null,"cid":null},"woyaola":21827805,"cnzz":null,"leancloud":{"app_id":"Mgc2jj2uZmdKVODXfj5LT8mt-MdYXbMMI","app_key":"3xZpYKXriWZv1kkJx3xvzmZV","server_url":"https://mgc2jj2u.api.lncldglobal.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -115,8 +119,29 @@
 
 
 <body>
-  
-
+  <div>
+    <div class='real_mask' style="
+		background-color: rgba(0,0,0,0.3);
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		z-index: -777;
+	"></div>
+    <div id="banner_video_insert">
+    </div>
+    <div id='banner_img'>
+    </div>
+</div>
+<div id="banner"></div>
+  <div id="banner_video_insert">
+  </div>
+  <div>
+    <div class='real_mask'></div>
+    <div id="banner_video_insert">
+    </div>
+    <div id='banner_img'>
+    </div>
+  </div>
   <header>
     
 
@@ -218,10 +243,66 @@
 </nav>
 
   
-
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/background.png') no-repeat center center; background-size: cover;">
+     style="background: url('/null') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
+    
+      <script>
+        var ua = navigator.userAgent;
+        var ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
+          isIphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
+          isAndroid = ua.match(/(Android)\s+([\d.]+)/),
+          isMobile = isIphone || isAndroid;
+
+        function set_video_attr(id)
+        {
+
+          var height = document.body.clientHeight
+          var width = document.body.clientWidth
+          var video_item = document.getElementById(id);
+
+          if (height / width < 0.56)
+          {
+            video_item.setAttribute('width', '100%');
+            video_item.setAttribute('height', 'auto');
+          } else
+          {
+            video_item.setAttribute('height', '100%');
+            video_item.setAttribute('width', 'auto');
+          }
+        }
+
+
+        if (!isMobile)
+        {
+          var video_url = "https://pic.qinyu.space/image/background.mp4"
+          var pre_show_image_url = "https://pic.qinyu.space/image/background.png"
+
+          banner_obj = document.getElementById("banner")
+          banner_obj.style.cssText = "background: url('" + pre_show_image_url + "') no-repeat; background-size: cover;"
+
+          vvd_banner_obj = document.getElementById("banner_img")
+
+          vvd_banner_content = "<img id='banner_img_item' src='" + pre_show_image_url + "' style='height: 100%; position: fixed; z-index: -999'>"
+          vvd_banner_obj.innerHTML = vvd_banner_content
+
+          video_html_res = "<video id='video_item' style='position: fixed; z-index: -888;'  muted='muted' src=" + video_url + " autoplay='autoplay' loop='loop'></video>"
+          document.getElementById("banner_video_insert").innerHTML = video_html_res;
+
+          set_video_attr('video_item')
+          set_video_attr('banner_img_item')
+        }
+
+
+        if (!isMobile)
+        {
+          window.onresize = function ()
+          {
+            set_video_attr('video_item')
+          }
+        }
+      </script>
+      
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
@@ -240,6 +321,75 @@
 
 </div>
 
+    <script type="text/javascript" src="/js/jquery.js"></script>
+
+    <div class="banner" id='banner'>
+
+        <div class="full-bg-img">
+
+        
+            <div id="banner_video_insert">
+            </div>
+            <script>
+
+                var ua = navigator.userAgent;
+                var ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
+                    isIphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
+                    isAndroid = ua.match(/(Android)\s+([\d.]+)/),
+                    isMobile = isIphone || isAndroid;
+
+                function set_video_attr(id)
+                {
+
+                    var height = document.body.children[0].clientHeight
+
+                    var width = document.body.children[0].clientWidth
+
+                    var video_item = document.getElementById(id);
+
+                    if (height / width < 0.56)
+                    {
+                        video_item.setAttribute('width', '100%');
+                        video_item.setAttribute('height', 'auto');
+                    } else
+                    {
+                        video_item.setAttribute('height', '100%');
+                        video_item.setAttribute('width', 'auto');
+                    }
+                }
+
+                $.getJSON('/vvd_js/video_url.json', function (data)
+                {
+                    $.getJSON('/vvd_js/video_url.json', function (data)
+                    {
+                        if (!isMobile)
+                        {
+                            var video_list_length = data.length
+                            var seed = Math.random()
+                            index = Math.floor(seed * video_list_length)
+
+                            video_url = data[index]
+                            video_html_res = "<video id='video_item' style='position: absolute;' muted='muted' src=" + video_url + " autoplay='autoplay' loop='loop'></video>"
+
+                            document.getElementById("banner_video_insert").innerHTML = video_html_res;
+                            set_video_attr('video_item')
+                        }
+
+                    });
+
+                    if (!isMobile)
+                    {
+                        window.onresize = function ()
+                        {
+                            set_video_attr('video_item')
+                        }
+                    }
+            </script>
+        
+            
+        </div>
+    </div>
+</div>
   </header>
 
   <main>
@@ -276,7 +426,7 @@
       
         <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="category-count col-2 col-md-1 col-xm-1">
           <i class="iconfont icon-articles"></i>
-          <span>1</span>
+          <span>2</span>
         </a>
       
       <div class="category-collapse collapse " id="collapse-8c5f70f85d5a691a5f1dc7be5473736b"
@@ -286,6 +436,15 @@
           
   <div class="category-post-list">
     
+    
+      
+      
+        <a href="/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B8%AD%E7%9A%84%E6%A2%AF%E5%BA%A6%E8%A1%B0%E5%87%8F/" title="如何理解RNN中的梯度消失"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">如何理解RNN中的梯度消失</span>
+        </a>
+      
     
       
       
@@ -391,7 +550,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <span>Copyright</span><i class="iconfont icon-copyright"></i><span>2023 QinYU</span> 
+       <span style="color: #ddd;"><span>Copyright</span><i class="iconfont icon-copyright"></i><span>2023 QinYU</span></span> 
     </div>
   
   
@@ -481,6 +640,7 @@
 
   
 <script src="/js/DynamicLine.js"></script>
+<script src="/js/reward.js"></script>
 
 
 
