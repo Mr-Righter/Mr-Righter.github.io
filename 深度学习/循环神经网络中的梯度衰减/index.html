@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://pic.qinyu.space/image/image-20231222112644910.png">
 <meta property="og:image" content="https://pic.qinyu.space/image/image-20231219200118619.png">
 <meta property="article:published_time" content="2023-12-19T09:18:27.000Z">
-<meta property="article:modified_time" content="2023-12-22T18:31:34.821Z">
+<meta property="article:modified_time" content="2023-12-23T06:27:39.080Z">
 <meta property="article:author" content="QinYU">
 <meta property="article:tag" content="RNN">
 <meta property="article:tag" content="梯度消失">
@@ -660,7 +660,7 @@ class="math inline">\(\frac{\partial l_t}{\partial
 \mathbf{W}_{hx}}\)</span>计算式<span
 class="math inline">\((8)\)</span>中某一项很小，<span
 class="math inline">\(\frac{\partial l_t}{\partial
-\mathbf{W}_{hx}}\)</span>整体由于是各个项的累加，因此基本不会因为某一项的消失而导致总体的消失，那么何来梯度消失这一说法呢？这是因为梯度消失在RNN相对于DNN有着不同的含义。</p>
+\mathbf{W}_{hx}}\)</span>整体由于是各个项的累加，因此基本不会因为某一项的消失而导致总体的消失，那么何来梯度消失这一说法呢？实际上RNN中确实会发生梯度消失，但是梯度消失在RNN相对于DNN有着不同的含义。</p>
 <p>我们不妨再回顾DNN和RNN模型之间的区别：</p>
 <ul>
 <li><p>在DNN中，每层有单独的参数，反向传播时，目标函数到任意一层之间的参数有且仅有1条路径，因此在式<span
@@ -716,7 +716,7 @@ class="math inline">\(\mathbf{h}_i\)</span>的依赖信息作为梯度构成的�
 class="math inline">\(\frac{\partial l_t}{\partial \mathbf{h}_i}
 \frac{\partial \mathbf{h}_i}{\partial
 \mathbf{W}_{hx}}\)</span>也很小（梯度消失），那么这些依赖信息对参数更新的影响也会很小，网络可能无法有效地学习到这些长距离的依赖信息，也就是捕捉不到长距离依赖。</p>
-<p><strong>所以RNN中梯度消失的真正含义是：在梯度更新时，由于长距离的依赖关系较弱，近距离依赖关系对整体梯度构成的影响更大，梯度被近距离的梯度主导，网络更倾向于利用近距离的梯度来更新参数，导致难以学到长距离的依赖关系。</strong></p>
+<p><strong>所以RNN中梯度消失的真正含义是：在梯度更新时，由于长距离的依赖关系较弱，近距离依赖关系对整体梯度构成的影响更大，梯度被近距离的梯度主导，模型更倾向于利用近距离的梯度来更新参数，导致难以学到长距离的依赖关系。</strong></p>
 <p>最后举一个语言建模的例子来充分理解长期依赖的含义：
 <img src="https://pic.qinyu.space/image/image-20231219200118619.png" srcset="/img/loading.gif" lazyload style="zoom:50%;" /></p>
 <p>观察上述两个例子，会发现句子开头的“Dog”这个词影响了位于最后的单词“has”，如果我们将单数词改为复数词“Dogs”，则应该将单词“has”改为"have"。对于上述例句，中间的句子可能会很长，位于末尾的单词受到几乎位于该句子开头的单词的影响，这就是我们所说的“长期依赖”
