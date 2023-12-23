@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://pic.qinyu.space/image/image-20231222112644910.png">
 <meta property="og:image" content="https://pic.qinyu.space/image/image-20231219200118619.png">
 <meta property="article:published_time" content="2023-12-19T09:18:27.000Z">
-<meta property="article:modified_time" content="2023-12-23T08:31:38.510Z">
+<meta property="article:modified_time" content="2023-12-23T10:21:57.700Z">
 <meta property="article:author" content="QinYU">
 <meta property="article:tag" content="RNN">
 <meta property="article:tag" content="梯度消失">
@@ -346,7 +346,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          7.8k 字
+          7.9k 字
         
       </span>
     
@@ -721,7 +721,8 @@ class="math inline">\(\frac{\partial l_t}{\partial \mathbf{h}_i}
 <img src="https://pic.qinyu.space/image/image-20231219200118619.png" srcset="/img/loading.gif" lazyload style="zoom:50%;" /></p>
 <p>观察上述两个例子，会发现句子开头的“Dog”这个词影响了位于最后的单词“has”，如果我们将单数词改为复数词“Dogs”，则应该将单词“has”改为"have"。对于上述例句，中间的句子可能会很长，位于末尾的单词受到几乎位于该句子开头的单词的影响，这就是我们所说的“长期依赖”
 。</p>
-<p>要想捕捉这种长期依赖，可以选择更复杂的LSTM和GRU模型，我们将在下一节分析LSTM和GRU是如何缓解梯度消失的。</p>
+<p>要想捕捉这种长期依赖，可以选择更复杂的LSTM和GRU模型，关于LSTM和GRU是如何缓解梯度消失的，推荐参考<a
+target="_blank" rel="noopener" href="https://kexue.fm/archives/7888">【也来谈谈RNN的梯度消失/爆炸问题】</a>中的论证。</p>
 <p><strong>【参考】</strong></p>
 <section class="footnotes">
 <div class="footnote-list">
