@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://pic.qinyu.space/image/image-20231222112644910.png">
 <meta property="og:image" content="https://pic.qinyu.space/image/image-20231219200118619.png">
 <meta property="article:published_time" content="2023-12-19T09:18:27.000Z">
-<meta property="article:modified_time" content="2023-12-23T10:21:57.700Z">
+<meta property="article:modified_time" content="2023-12-23T14:43:35.112Z">
 <meta property="article:author" content="QinYU">
 <meta property="article:tag" content="RNN">
 <meta property="article:tag" content="梯度消失">
@@ -82,7 +82,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"qinyu.space","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"❡"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":"G-1XHKDCG0YK"},"tencent":{"sid":null,"cid":null},"woyaola":21827805,"cnzz":null,"leancloud":{"app_id":"Mgc2jj2uZmdKVODXfj5LT8mt-MdYXbMMI","app_key":"3xZpYKXriWZv1kkJx3xvzmZV","server_url":"https://mgc2jj2u.api.lncldglobal.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"qinyu.space","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"❡"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":"G-1XHKDCG0YK"},"tencent":{"sid":null,"cid":null},"woyaola":21827805,"cnzz":null,"leancloud":{"app_id":"Mgc2jj2uZmdKVODXfj5LT8mt-MdYXbMMI","app_key":"3xZpYKXriWZv1kkJx3xvzmZV","server_url":"https://mgc2jj2u.api.lncldglobal.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -137,7 +137,7 @@
 <body>
   <div>
     <div class='real_mask' style="
-		background-color: rgba(0,0,0,0.3);
+		background-color: rgba(0,0,0,0);
 		width: 100%;
 		height: 100%;
 		position: fixed;
@@ -149,15 +149,7 @@
     </div>
 </div>
 <div id="banner"></div>
-  <div id="banner_video_insert">
-  </div>
-  <div>
-    <div class='real_mask'></div>
-    <div id="banner_video_insert">
-    </div>
-    <div id='banner_img'>
-    </div>
-  </div>
+
   <header>
     
 
@@ -183,7 +175,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/">
+              <a class="nav-link" href="/" target="_self">
                 <i class="iconfont icon-home-fill"></i>
                 <span>首页</span>
               </a>
@@ -195,7 +187,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/archives/">
+              <a class="nav-link" href="/archives/" target="_self">
                 <i class="iconfont icon-archive-fill"></i>
                 <span>归档</span>
               </a>
@@ -207,7 +199,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/categories/">
+              <a class="nav-link" href="/categories/" target="_self">
                 <i class="iconfont icon-category-fill"></i>
                 <span>分类</span>
               </a>
@@ -219,7 +211,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/tags/">
+              <a class="nav-link" href="/tags/" target="_self">
                 <i class="iconfont icon-tags-fill"></i>
                 <span>标签</span>
               </a>
@@ -231,7 +223,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/about/">
+              <a class="nav-link" href="/about/" target="_self">
                 <i class="iconfont icon-user-fill"></i>
                 <span>关于</span>
               </a>
@@ -259,66 +251,10 @@
 </nav>
 
   
+
 <div id="banner" class="banner" parallax=true
-     style="background: url('/null') no-repeat center center; background-size: cover;">
+     style="background: url('/img/bg-trans.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
-    
-      <script>
-        var ua = navigator.userAgent;
-        var ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
-          isIphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
-          isAndroid = ua.match(/(Android)\s+([\d.]+)/),
-          isMobile = isIphone || isAndroid;
-
-        function set_video_attr(id)
-        {
-
-          var height = document.body.clientHeight
-          var width = document.body.clientWidth
-          var video_item = document.getElementById(id);
-
-          if (height / width < 0.56)
-          {
-            video_item.setAttribute('width', '100%');
-            video_item.setAttribute('height', 'auto');
-          } else
-          {
-            video_item.setAttribute('height', '100%');
-            video_item.setAttribute('width', 'auto');
-          }
-        }
-
-
-        if (true)
-        {
-          var video_url = "https://pic.qinyu.space/image/background.mp4"
-          var pre_show_image_url = "https://pic.qinyu.space/image/background.png"
-
-          banner_obj = document.getElementById("banner")
-          banner_obj.style.cssText = "background: url('" + pre_show_image_url + "') no-repeat; background-size: cover;"
-
-          vvd_banner_obj = document.getElementById("banner_img")
-
-          vvd_banner_content = "<img id='banner_img_item' src='" + pre_show_image_url + "' style='height: 100%; position: fixed; z-index: -999'>"
-          vvd_banner_obj.innerHTML = vvd_banner_content
-
-          video_html_res = "<video id='video_item' style='position: fixed; z-index: -888;'  muted='muted' src=" + video_url + " autoplay='autoplay' loop='loop'></video>"
-          document.getElementById("banner_video_insert").innerHTML = video_html_res;
-
-          set_video_attr('video_item')
-          set_video_attr('banner_img_item')
-        }
-
-
-        if (true)
-        {
-          window.onresize = function ()
-          {
-            set_video_attr('video_item')
-          }
-        }
-      </script>
-      
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
@@ -346,7 +282,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          7.9k 字
+          2.9k 字
         
       </span>
     
@@ -357,7 +293,7 @@
         
         
         
-          66 分钟
+          25 分钟
         
       </span>
     
@@ -389,75 +325,53 @@
 
 </div>
 
-    <script type="text/javascript" src="/js/jquery.js"></script>
-
+    
+    <script type="text/javascript" src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/2.1.3/jquery.min.js"></script>
     <div class="banner" id='banner'>
 
         <div class="full-bg-img">
 
-        
-            <div id="banner_video_insert">
-            </div>
-            <script>
+            
+                <script>
+                    var ua = navigator.userAgent;
+                    var ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
+                        isIphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
+                        isAndroid = ua.match(/(Android)\s+([\d.]+)/),
+                        isMobile = isIphone || isAndroid;
 
-                var ua = navigator.userAgent;
-                var ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
-                    isIphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
-                    isAndroid = ua.match(/(Android)\s+([\d.]+)/),
-                    isMobile = isIphone || isAndroid;
 
-                function set_video_attr(id)
-                {
-
-                    var height = document.body.children[0].clientHeight
-
-                    var width = document.body.children[0].clientWidth
-
-                    var video_item = document.getElementById(id);
-
-                    if (height / width < 0.56)
+                    $.getJSON('/js/video_url.json', function (data)
                     {
-                        video_item.setAttribute('width', '100%');
-                        video_item.setAttribute('height', 'auto');
-                    } else
-                    {
-                        video_item.setAttribute('height', '100%');
-                        video_item.setAttribute('width', 'auto');
-                    }
-                }
-
-                $.getJSON('/vvd_js/video_url.json', function (data)
-                {
-                    $.getJSON('/vvd_js/video_url.json', function (data)
-                    {
-                        if (!isMobile)
+                        if (true)
                         {
                             var video_list_length = data.length
                             var seed = Math.random()
                             index = Math.floor(seed * video_list_length)
 
-                            video_url = data[index]
-                            video_html_res = "<video id='video_item' style='position: absolute;' muted='muted' src=" + video_url + " autoplay='autoplay' loop='loop'></video>"
+                            video_url = data[index][0]
+                            pre_show_image_url = data[index][1]
 
-                            document.getElementById("banner_video_insert").innerHTML = video_html_res;
-                            set_video_attr('video_item')
+                            banner_obj = document.getElementById("banner")
+                            banner_obj.style.cssText = "background: url('" + pre_show_image_url + "') no-repeat;"
+
+                            vvd_banner_obj = document.getElementById("banner_img")
+                            vvd_banner_content = "<img id='banner_img_item' src='" + pre_show_image_url + "'style='position: fixed; object-fit: cover; width: 100vw; height: 100vh; z-index: -999'>"
+                            vvd_banner_obj.innerHTML = vvd_banner_content
+                            
+                            if (!isMobile)
+                            {
+                                video_html_res = "<video id='video_item' style='position: fixed; object-fit: cover; width: 100vw; height: 100vh; z-index: -888;'  muted='muted' src=" + video_url + " autoplay='autoplay' loop='loop'></video>"
+                                document.getElementById("banner_video_insert").innerHTML = video_html_res;
+                            }
                         }
-
                     });
 
-                    if (!isMobile)
-                    {
-                        window.onresize = function ()
-                        {
-                            set_video_attr('video_item')
-                        }
-                    }
-            </script>
-        
-            
+                </script>
+                
         </div>
     </div>
 </div>
+
   </header>
 
   <main>
@@ -470,7 +384,7 @@
       
   <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
     <div id="toc">
-  <p class="toc-header vvd_contents">
+  <p class="toc-header">
     <i class="iconfont icon-list"></i>
     <span>目录</span>
   </p>
@@ -577,13 +491,13 @@ class="math inline">\({\sigma}&#39;\)</span>恒小于1。当二者综合表现�
 与DNN只在最后输出层才会输出值用于误差计算不同，RNN在每一个时间步都会有输出，并且输出的值最终都会参与误差计算。用<span
 class="math inline">\(l_t(\mathbf{o}_t, y_t)\)</span>表示时间步<span
 class="math inline">\(t\)</span>处的损失函数，反向传播时，需要分别计算<span
-class="math inline">\(\frac{\partial l_t}{\partial \bf
-W_{xh}}\)</span>、<span class="math inline">\(\frac{\partial
-l_t}{\partial \bf W_{hh}}\)</span>、<span
-class="math inline">\(\frac{\partial l_t}{\partial \bf
-W_{qh}}\)</span></p>
-<p>其中<span class="math inline">\(\frac{\partial l_t}{\partial \bf
-W_{qh}}\)</span>很好计算： <span class="math display">\[
+class="math inline">\(\frac{\partial l_t}{\partial \mathbf
+{W}_{hx}}\)</span>、<span class="math inline">\(\frac{\partial
+l_t}{\partial \mathbf {W}_{hh}}\)</span>、<span
+class="math inline">\(\frac{\partial l_t}{\partial \mathbf
+{W}_{qh}}\)</span></p>
+<p>其中<span class="math inline">\(\frac{\partial l_t}{\partial \mathbf
+{W}_{qh}}\)</span>很好计算： <span class="math display">\[
 \frac{\partial l_t}{\partial \mathbf{W}_{qh}}
 =  \frac{\partial l_t}{\partial \mathbf{o}_t} \frac{\partial
 \mathbf{o}_t}{\partial \mathbf{W}_{qh}}
@@ -658,13 +572,13 @@ class="math inline">\(\frac{\partial \mathbf{h}_t}{\partial
 \mathbf{h}_{i}}\)</span>很小只能代表<span
 class="math inline">\(\frac{\partial l_t}{\partial
 \mathbf{W}_{hx}}\)</span>计算式<span
-class="math inline">\((8)\)</span>中某一项很小，<span
+class="math inline">\((7)\)</span>中某一项很小，<span
 class="math inline">\(\frac{\partial l_t}{\partial
 \mathbf{W}_{hx}}\)</span>整体由于是各个项的累加，因此基本不会因为某一项的消失而导致总体的消失，那么何来梯度消失这一说法呢？实际上RNN中确实会发生梯度消失，但是梯度消失在RNN相对于DNN有着不同的含义。</p>
 <p>我们不妨再回顾DNN和RNN模型之间的区别：</p>
 <ul>
-<li><p>在DNN中，每层有单独的参数，反向传播时，目标函数到任意一层之间的参数有且仅有1条路径，因此在式<span
-class="math inline">\((3)\)</span>中没有出现多条路径梯度的累加，因此唯一1条路径上发生梯度消失就会使整体的梯度消失。</p></li>
+<li><p>在DNN中，每层有单独的参数，反向传播时，目标函数到任意一层参数有且仅有1条路径，因此在式<span
+class="math inline">\((3)\)</span>中没有出现多条路径梯度的累加，如果唯一的1条路径上发生梯度消失就会使整体的梯度消失。</p></li>
 <li><p>在RNN中，每一个时间步共享参数矩阵<span
 class="math inline">\(\mathbf{W}_{hx}\)</span>和<span
 class="math inline">\(\mathbf{W}_{hh}\)</span>，目标函数到参数<span
@@ -687,7 +601,7 @@ class="math inline">\(l_t\)</span>到<span
 class="math inline">\(\mathbf{W}_{hx}\)</span>的一条路径，只不过这些路径有长有短。路径越长，对应的<span
 class="math inline">\(\frac{\partial \mathbf{h}_t}{\partial
 \mathbf{h}_{i}}\)</span>产生的乘法链就越长，由式<span
-class="math inline">\((10)\)</span>可以看出该路径的梯度就会消失，但是只要其他路径上还存在梯度就不会导致整体梯度的消失。<strong>因此RNN
+class="math inline">\((10)\)</span>可以看出该路径的梯度就会越可能消失，但是只要其他路径上还存在梯度就不会导致整体梯度的消失。<strong>因此RNN
 中总的梯度是不会消失的，即便梯度越传越弱，那也只是远距离的梯度消失，由于近距离的梯度不会消失，所有梯度之和便不会消失</strong>。</p>
 <p><strong>那么RNN中远距离的梯度消失与RNN捕捉不到长距离依赖有什么关系呢？</strong></p>
 <p>我们仍从表达式来分析，将梯度<span
@@ -753,30 +667,27 @@ target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/109519044">htt
               </div>
             
             <hr/>
-
-            
-          <!-- 添加打赏模块 -->
-          <div class="reward-container">
-            
-              <button id="rewardBtn" class="reward-btn">
-                
-                  Buy me a coffee ♨️
+            <!-- 添加打赏模块 -->
+            <div class="reward-container">
+              
+                <button id="rewardBtn" class="reward-btn">
                   
-              </button>
-              
-              <div id="rewardImgContainer" class="reward-img-container">
-                <div class="singleImgContainer">
-                  <img id="wechatImg" class="reward-img" src="/img/wechatpay.jpg" srcset="/img/loading.gif" lazyload alt="微信二维码">
-                  <p class="wechatPay">wechatPay</p>
+                    Buy me a coffee ⛾
+                    
+                </button>
+                
+                <div id="rewardImgContainer" class="reward-img-container">
+                  <div class="singleImgContainer">
+                    <img id="wechatImg" class="reward-img" src="/img/wechatpay.jpg" srcset="/img/loading.gif" lazyload alt="微信二维码">
+                    <p class="wechatPay">微信支付</p>
+                  </div>
+                  <div class="singleImgContainer">
+                    <img id="alipayImg" class="reward-img" src="/img/alipay.jpg" srcset="/img/loading.gif" lazyload alt="支付宝二维码">
+                    <p class="aliPay">支付宝支付</p>
+                  </div>
                 </div>
-                <div class="singleImgContainer">
-                  <img id="alipayImg" class="reward-img" src="/img/alipay.jpg" srcset="/img/loading.gif" lazyload alt="支付宝二维码">
-                  <p class="aliPay">aliPay</p>
-                </div>
-              </div>
-              
-          </div>
-
+                
+            </div>
 
             <div>
               <div class="post-metas my-3">
