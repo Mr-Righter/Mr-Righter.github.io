@@ -182,6 +182,7 @@ h6:hover > .anchorjs-link {
 .footer-inner {
   padding: 3rem 0 1rem 0;
   text-align: center;
+  color: #ddd;
 }
 .footer-inner > div:not(:first-child) {
   margin: 0.25rem 0;
@@ -734,7 +735,7 @@ sup > a::before,
   font-size: 0.95rem;
 }
 .tocbot-link {
-  color: var(--text-color);
+  color: #ddd;
 }
 .tocbot-active-link {
   font-weight: bold;
