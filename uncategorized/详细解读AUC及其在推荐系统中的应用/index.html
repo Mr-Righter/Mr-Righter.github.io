@@ -16,41 +16,31 @@
   <meta name="author" content="QinYU">
   <meta name="keywords" content="">
   
-    <meta name="description" content="对于国内大陆用户而言，想要直接访问用 github 托管的个人博客不是件容易的事，为了解决网络不可达问题，可以采用将网页内容分发到全球各地的服务器上，同时还能缩短网站加载时间。">
+    <meta name="description" content="详细解读AUC及其在推荐系统中的应用 在面试算法岗时，面试官经常会问关于AUC的一些问题，比如AUC的定义，AUC的计算方法，AUC的优缺点等等。本文将深入浅出地介绍AUC的含义、计算方法及其在推荐系统中的应用。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="博客搭建（一）| 利用cloudflare加速github博客访问">
-<meta property="og:url" content="https://qinyu.space/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/%E5%88%A9%E7%94%A8cloudflare%E5%8A%A0%E9%80%9Fgithub%E4%B8%BB%E9%A1%B5%E8%AE%BF%E9%97%AE/index.html">
+<meta property="og:title" content="详细解读AUC及其在推荐系统中的应用">
+<meta property="og:url" content="https://qinyu.space/uncategorized/%E8%AF%A6%E7%BB%86%E8%A7%A3%E8%AF%BBAUC%E5%8F%8A%E5%85%B6%E5%9C%A8%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/index.html">
 <meta property="og:site_name" content="QinYU">
-<meta property="og:description" content="对于国内大陆用户而言，想要直接访问用 github 托管的个人博客不是件容易的事，为了解决网络不可达问题，可以采用将网页内容分发到全球各地的服务器上，同时还能缩短网站加载时间。">
+<meta property="og:description" content="详细解读AUC及其在推荐系统中的应用 在面试算法岗时，面试官经常会问关于AUC的一些问题，比如AUC的定义，AUC的计算方法，AUC的优缺点等等。本文将深入浅出地介绍AUC的含义、计算方法及其在推荐系统中的应用。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://pic.qinyu.space/image/image-20231204215539220.png">
-<meta property="og:image" content="https://pic.qinyu.space/image/image-20231204222749831.png">
-<meta property="og:image" content="https://pic.qinyu.space/image/image-20231204223059530.png">
-<meta property="og:image" content="https://pic.qinyu.space/image/image-20231204223242693.png">
-<meta property="og:image" content="https://pic.qinyu.space/image/image-20231204223942549.png">
-<meta property="og:image" content="https://pic.qinyu.space/image/image-20231204224450727.png">
-<meta property="og:image" content="https://pic.qinyu.space/image/image-20231204225200173.png">
-<meta property="og:image" content="https://pic.qinyu.space/image/image-20231204230559749.png">
-<meta property="og:image" content="https://pic.qinyu.space/image/image-20231204233423686.png">
-<meta property="og:image" content="https://pic.qinyu.space/image/image-20231204231234047.png">
-<meta property="og:image" content="https://pic.qinyu.space/image/image-20231204232327896.png">
-<meta property="og:image" content="https://pic.qinyu.space/image/image-20231204233838791.png">
-<meta property="og:image" content="https://pic.qinyu.space/image/image-20231204234453901.png">
-<meta property="og:image" content="https://pic.qinyu.space/image/image-20231204234850740.png">
-<meta property="og:image" content="https://pic.qinyu.space/image/image-20231204235122269.png">
-<meta property="article:published_time" content="2023-12-04T13:20:11.000Z">
-<meta property="article:modified_time" content="2023-12-05T06:32:27.483Z">
+<meta property="og:image" content="https://pic.qinyu.space/image/20240810032547.png">
+<meta property="og:image" content="https://pic.qinyu.space/image/roc-auc1.gif">
+<meta property="og:image" content="https://pic.qinyu.space/image/roc-auc2.gif">
+<meta property="og:image" content="https://pic.qinyu.space/image/roc-auc3.gif">
+<meta property="og:image" content="https://pic.qinyu.space/image/20240810032939.png">
+<meta property="og:image" content="https://pic.qinyu.space/image/20240810020420.png">
+<meta property="article:published_time" content="2024-08-09T19:18:28.000Z">
+<meta property="article:modified_time" content="2024-08-09T19:34:42.745Z">
 <meta property="article:author" content="QinYU">
-<meta property="article:tag" content="cdn">
-<meta property="article:tag" content="cloudflare">
+<meta property="article:tag" content="推荐系统">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://pic.qinyu.space/image/image-20231204215539220.png">
+<meta name="twitter:image" content="https://pic.qinyu.space/image/20240810032547.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>博客搭建（一）| 利用cloudflare加速github博客访问 - QinYU</title>
+  <title>详细解读AUC及其在推荐系统中的应用 - QinYU</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -281,7 +271,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="博客搭建（一）| 利用cloudflare加速github博客访问"></span>
+            <span id="subtitle" data-typed-text="详细解读AUC及其在推荐系统中的应用"></span>
           
         </div>
 
@@ -297,8 +287,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-12-04 21:20" pubdate>
-          2023年12月4日 晚上
+        <time datetime="2024-08-10 03:18" pubdate>
+          2024年8月10日 凌晨
         </time>
       </span>
     
@@ -309,7 +299,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          951 字
+          2.9k 字
         
       </span>
     
@@ -320,7 +310,7 @@
         
         
         
-          8 分钟
+          24 分钟
         
       </span>
     
@@ -429,12 +419,12 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">博客搭建（一）| 利用cloudflare加速github博客访问</h1>
+            <h1 id="seo-header">详细解读AUC及其在推荐系统中的应用</h1>
             
               <p id="updated-time" class="note note-info" style="">
                 
                   
-                    本文最后更新于 2023年12月5日 下午
+                    本文最后更新于 2024年8月10日 凌晨
                   
                 
               </p>
@@ -442,126 +432,215 @@
             
               <div class="markdown-body">
                 
-                <h2 id="前言">1. 前言</h2>
-<p>对于国内大陆用户而言，想要直接访问用 github
-托管的个人博客不是件容易的事，为了解决网络不可达问题，可以采用 <a
-target="_blank" rel="noopener" href="https://www.cloudflare.com/zh-hans-cn/learning/cdn/what-is-a-cdn/">CDN(content
-delivery
-network)</a>将网页内容分发到全球各地的服务器上，同时还能缩短网站加载时间。</p>
-<figure>
-<img src="https://pic.qinyu.space/image/image-20231204215539220.png" srcset="/img/loading.gif" lazyload
-alt="image-20231204215539220" />
-<figcaption aria-hidden="true">image-20231204215539220</figcaption>
-</figure>
-<p>但是大部分国内的CDN服务都是收费的，所以就把目光转向了
-cloudflare。cloudflare 作为全球最大的网络服务提供商，提供免费的cdn
-服务，虽然 cdn
-节点都在国外，但还是比直接访问github.io要快的多，不过免费版请求次数限制有10w次的限制，但对于我们博客而言是绰绰有余了，下面介绍配置过程。</p>
-<h2 id="准备">2. 准备</h2>
-<p>使用 cloudflare 的 cdn
-服务需要我们拥有一个可配置的域名，所以需要先购买一个域名，本人是在腾讯云上购买的<code>.space</code>的后缀的域名，10年价格也只要一百多，还是很便宜的，购买域名的教程就跳过了。</p>
-<h2 id="教程">3. 教程</h2>
-<p>注：教程中的<code>qinyu.me</code>和<code>qinyu.space</code>都是本人域名，所以在以下内容中可以视为同一个。</p>
-<h3 id="配置-cloudflare">3.1 配置 cloudflare</h3>
-<ol type="1">
-<li><p>进入<a
-target="_blank" rel="noopener" href="https://www.cloudflare-cn.com/">https://www.cloudflare-cn.com/</a>，注册账号并登录</p></li>
-<li><p>在左侧栏中进入<code>网站</code>一栏，点击右方<code>添加站点</code></p>
-<figure>
-<img src="https://pic.qinyu.space/image/image-20231204222749831.png" srcset="/img/loading.gif" lazyload
-alt="image-20231204222749831" />
-<figcaption aria-hidden="true">image-20231204222749831</figcaption>
-</figure></li>
-<li><p>输入自己的域名，<strong>注意不要带<code>www</code>或者<code>https</code></strong>，比如我的就直接填写<code>qinyu.space</code></p>
-<figure>
-<img src="https://pic.qinyu.space/image/image-20231204223059530.png" srcset="/img/loading.gif" lazyload
-alt="image-20231204223059530" />
-<figcaption aria-hidden="true">image-20231204223059530</figcaption>
-</figure></li>
-<li><p>选择套餐，<code>free</code>即可</p>
-<figure>
-<img src="https://pic.qinyu.space/image/image-20231204223242693.png" srcset="/img/loading.gif" lazyload
-alt="image-20231204223242693" />
-<figcaption aria-hidden="true">image-20231204223242693</figcaption>
-</figure></li>
-<li><p>点击继续后 cloudflare 会自动扫描域名的 dns
-记录，如果是刚刚创建的域名，可能扫描的结果为空。截图中的几条记录可以不用管</p>
-<figure>
-<img src="https://pic.qinyu.space/image/image-20231204223942549.png" srcset="/img/loading.gif" lazyload
-alt="image-20231204223942549" />
-<figcaption aria-hidden="true">image-20231204223942549</figcaption>
-</figure></li>
-<li><p><strong>这一步很重要，点击添加记录，按照如下方式添加类型为A，名称为@，IPv4地址为<code>185.199.108.153</code></strong></p>
-<figure>
-<img src="https://pic.qinyu.space/image/image-20231204224450727.png" srcset="/img/loading.gif" lazyload
-alt="image-20231204224450727" />
-<figcaption aria-hidden="true">image-20231204224450727</figcaption>
-</figure>
-<p><strong>按照上述方式再添加以下三条记录，类型和名称和上述相同，IPv4地址分别为：</strong></p>
-<figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs accesslog"><span class="hljs-number">185.199.109.153</span><br><span class="hljs-number">185.199.110.153</span><br><span class="hljs-number">185.199.111.153</span><br></code></pre></td></tr></table></figure>
-<p><strong>完成之后应该能看到列表中有以下四条这样的记录，除了<code>名称</code>是自己的域名外其他应该都和图中相同</strong></p>
-<figure>
-<img src="https://pic.qinyu.space/image/image-20231204225200173.png" srcset="/img/loading.gif" lazyload
-alt="image-20231204225200173" />
-<figcaption aria-hidden="true">image-20231204225200173</figcaption>
-</figure>
-<p>上述添加的4条ip地址均是GitHub Pages 的 IP 地址，具体可查看【<a
-target="_blank" rel="noopener" href="https://docs.github.com/zh/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site">https://docs.github.com/zh/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site</a>】</p></li>
-<li><p>点击继续后，cloudflare
-会要求将我们DNS服务器修改为以下图中所示的的服务器，可以先截个图或者存文档里：</p>
-<figure>
-<img src="https://pic.qinyu.space/image/image-20231204230559749.png" srcset="/img/loading.gif" lazyload
-alt="image-20231204230559749" />
-<figcaption aria-hidden="true">image-20231204230559749</figcaption>
-</figure></li>
-<li><p>点击下方继续后会有一个快速入门指南，里面的配置可以都开启：</p>
-<figure>
-<img src="https://pic.qinyu.space/image/image-20231204233423686.png" srcset="/img/loading.gif" lazyload
-alt="image-20231204233423686" />
-<figcaption aria-hidden="true">image-20231204233423686</figcaption>
-</figure></li>
+                <h1
+id="详细解读auc及其在推荐系统中的应用">详细解读AUC及其在推荐系统中的应用</h1>
+<p>在面试算法岗时，面试官经常会问关于AUC的一些问题，比如AUC的定义，AUC的计算方法，AUC的优缺点等等。本文将深入浅出地介绍AUC的含义、计算方法及其在推荐系统中的应用。</p>
+<span id="more"></span>
+<h2 id="应用情景">应用情景</h2>
+<p>在介绍AUC之前我们先来考虑一个实际的推荐情景：假设现在商品库里有6件物品，分别是<span
+class="math inline">\(\{A, B, C, D, E,
+F\}\)</span>，而你实际感兴趣的只有<span
+class="math inline">\(\{B,D,F\}\)</span>这两件物品，假设推荐系统预测你对这6件物品的兴趣的顺序为<span
+class="math inline">\(\{A, B, C, D, E,
+F\}\)</span>，如果推荐系统只能推荐3件物品，那么被推荐的物品为<span
+class="math inline">\(\{A, B,
+C\}\)</span>，也就是说你感兴趣3件物品中只有1件物品被推荐出来了，而3件不感兴趣的物品中有2件物品被推荐出来了，很明显<span
+class="math inline">\(\frac{1}{3} &lt;
+\frac{2}{3}\)</span>，说明推荐系统的推荐效果不好。</p>
+<h2 id="如何衡量推荐效果">如何衡量推荐效果</h2>
+<p>我们将用户感兴趣的商品称为正例，不感兴趣的商品称为负例。经过分类器决策后，数据可以被划分成4个部分：<strong>TP(True
+Positive)、FP(False Positive)、TN(True Negative)、FN(False
+Negative)</strong>，positive和negative表示预测的类别，而true和false表示预测的正确性，在我们的情境中，<span
+class="math inline">\(TP\)</span>为<span
+class="math inline">\(\{B\}\)</span>，<span
+class="math inline">\(FP\)</span>为<span
+class="math inline">\(\{A,C\}\)</span>，<span
+class="math inline">\(TN\)</span>为<span
+class="math inline">\(\{E\}\)</span>，<span
+class="math inline">\(FN\)</span>为<span
+class="math inline">\(\{D,F\}\)</span>。 <img
+src="https://pic.qinyu.space/image/20240810032507.png" srcset="/img/loading.gif" lazyload /></p>
+<p>有了上述定义，我们就可以引入两个概念：<strong>TPR(True Positive
+Rate)、FPR(False Positive Rate)</strong> <span class="math display">\[
+\begin{split}\begin{aligned}
+TPR &amp;= \frac{TP}{TP + FN} \\
+FPR &amp;= \frac{FP}{FP + TN}
+\end{aligned}\end{split}
+\]</span> 在推荐系统中，<span
+class="math inline">\(TPR\)</span>表示用户感兴趣的物品被推荐出来的概率（上文提到的<span
+class="math inline">\(\frac{1}{3}\)</span>，也称为recall），<span
+class="math inline">\(FPR\)</span>表示用户不感兴趣的物品被推荐出来的概率（上文提到的<span
+class="math inline">\(\frac{2}{3}\)</span>）。比较<span
+class="math inline">\(TPR\)</span>和<span
+class="math inline">\(FPR\)</span>的大小可以得出以下结论： - 当<span
+class="math inline">\(TPR &gt;
+FPR\)</span>时，说明推荐系统的推荐效果不错，推荐的物品中用户感兴趣的物品占总感兴趣物品的比例较大
+- 当<span class="math inline">\(TPR &lt;
+FPR\)</span>时，说明推荐系统的推荐效果不好，推荐的物品中用户感兴趣的物品占总感兴趣物品的比例较小
+- 当<span class="math inline">\(TPR =
+FPR\)</span>时，说明推荐系统对任意一个物品推荐和不推荐的概率相等。</p>
+<h2 id="roc和auc的定义">ROC和AUC的定义</h2>
+<p>在上述的情景中，我们知道如果推荐系统推荐的商品总数是确定的，那么TPR和FPR是确定的，我们可以通过改变推荐的商品总数来获取多组TPR和FPR。例如我们将推荐的商品总数改为4，那么被推荐的物品为<span
+class="math inline">\(\{A, B, C,D\}\)</span>，TPR和FPR计算如下： <span
+class="math display">\[
+\begin{split}\begin{aligned}
+TPR &amp;= \frac{TP}{TP + FN} = \frac{2}{2+1} \\
+FPR &amp;= \frac{FP}{FP + TN} = \frac{2}{2+1}
+\end{aligned}\end{split}
+\]</span></p>
+<p>我们将多组TPR和FPR在二维坐标系中绘制出来，横坐标为FPR，纵坐标为TPR，并将这些点连接起来就得到了ROC（Receiver
+Operating Characteristic）曲线（下图与情景无关）：</p>
+<p><img src="https://pic.qinyu.space/image/20240810032547.png" srcset="/img/loading.gif" lazyload /></p>
+<p>图中，A，G点表示模型有一定的甄别能力（TPR&gt;FPR），其中A点对应一个完美分类器，所有正例都能被正确分类（TPR=1），所有负例没有被识别错误（FPR=0）。F点就是分类器太差了（TPR
+&lt; FPR）。E点表示随机分类（TPR=FPR），即以50%的概率随机猜测。</p>
+<p>而AUC（Area Under
+Curve）就是ROC曲线下的面积，AUC的取值不大于1，AUC越大，说明模型的性能越好，AUC=1表示模型的性能最好。</p>
+<p><code>sklearn.metrics.roc_auc_score</code>函数可以计算AUC值，这里简单介绍一下其实现过程。
+<code>roc_auc_score</code>函数接收scores和labels两个参数，其中scores表示模型预测的评分，分数越高表示用户对该物品的兴趣可能越大，labels表示真实的标签，1表示用户感兴趣，0表示用户不感兴趣。</p>
+<p>为了获取多组TPR和FPR，会先对scores进行排序，然后遍历scores，<strong>每次将一个score作为阈值（也就是上文提到的改变推荐的商品总数），将scores中大于等于该阈值的样本预测为正例，小于该阈值的样本标预测负例</strong>，这样就可以得到TP、FP、TN、FN。</p>
+<p>TPR的计算如下图所示：</p>
+<p><img src="https://pic.qinyu.space/image/roc-auc1.gif" srcset="/img/loading.gif" lazyload /></p>
+<p>FPR的计算如下图所示：</p>
+<p><img src="https://pic.qinyu.space/image/roc-auc2.gif" srcset="/img/loading.gif" lazyload /></p>
+<p>不同的阈值会得到不同的TPR和FPR，遍历阈值将多组TPR和FPR绘制成ROC曲线，如下图：</p>
+<p><img src="https://pic.qinyu.space/image/roc-auc3.gif" srcset="/img/loading.gif" lazyload /></p>
+<p>然后计算ROC曲线下小梯形面积之和即为AUC值。</p>
+<h2 id="auc的含义">AUC的含义</h2>
+<p>上述内容我们介绍了AUC的计算方法，那么AUC这个面积具体有什么含义呢？我们将ROC曲线视为<span
+class="math inline">\(TPR\)</span>关于<span
+class="math inline">\(FPR\)</span>的函数，即<span
+class="math inline">\(TPR =
+F(x)\)</span>，那么AUC就是对这个函数进行积分，如下所示：</p>
+<p><img src="https://pic.qinyu.space/image/20240810032939.png" srcset="/img/loading.gif" lazyload /></p>
+<p><span class="math display">\[
+AUC = \int_{0}^{1} F(x)dx
+\]</span> 假设样本标签为<span
+class="math inline">\(y\)</span>，模型预测得分为<span
+class="math inline">\(s\)</span>，阈值为<span
+class="math inline">\(t\)</span>，模型预测正例的概率密度函数为<span
+class="math inline">\(f_1(s)\)</span>，预测负例的概率密度函数为<span
+class="math inline">\(f_0(s)\)</span>，由于<span
+class="math inline">\(x\)</span>是<span
+class="math inline">\(s\)</span>和<span
+class="math inline">\(t\)</span>的函数，因此我们可以将<span
+class="math inline">\(F(x)\)</span>和<span
+class="math inline">\(x\)</span>均看作是<span
+class="math inline">\(s\)</span>和<span
+class="math inline">\(t\)</span>的函数，则有： <span
+class="math display">\[
+\begin{split}\begin{aligned}
+TPR &amp;= F(x) = \int_{t}^{\infty} f_1(s)ds = P \\
+FPR &amp;= x = \int_{t}^{\infty} f_0(s)ds
+\end{aligned}\end{split}
+\]</span></p>
+<p><span class="math inline">\(x\)</span>是<span
+class="math inline">\(t\)</span>的变下限积分函数，<span
+class="math inline">\(x\)</span>对<span
+class="math inline">\(t\)</span>求导可得： <span class="math display">\[
+\begin{split}\begin{aligned}
+\frac{dx}{dt} &amp;= -f_0(t) \\
+dx &amp;= -f_0(t)dt = -P(s^{\prime}=t|y^{\prime}=0)dt
+\end{aligned}\end{split}
+\]</span> 这里<span class="math inline">\(s^{\prime}\)</span>和<span
+class="math inline">\(y^{\prime}\)</span>只是为了与正例的<span
+class="math inline">\(s\)</span>和<span
+class="math inline">\(y\)</span>区分开来，<span
+class="math inline">\(P(s^{\prime}=t|y^{\prime}=0)\)</span>表示在样本标签为0的情况下，模型预测得分为<span
+class="math inline">\(t\)</span>的概率。则有： <span
+class="math display">\[
+\begin{aligned}
+AUC&amp; =\int_0^1F(x)dx \\
+&amp;=\int_\infty^{-\infty}F(x)(-f_0(t))dt \\
+&amp;=\int_{-\infty}^\infty F(x)f_0(t)dt \\
+&amp;=\int_{-\infty}^\infty P(s&gt;t|y=1)f_0(t)dt \\
+&amp;=\int_{-\infty}^\infty P(s&gt;t|y=1)\times
+P(s^{\prime}=t|y&#39;=0)dt \\
+&amp;=\int_{-\infty}^\infty P(s&gt;t\land s^{\prime}=t|y=1\land
+y^{\prime}=0)dt \\
+&amp;=\int_{-\infty}^\infty P(s&gt;s^{\prime}\land s^{\prime}=t|y=1\land
+y^{\prime}=0)dt \\
+&amp;=P(s&gt;s^{\prime}|y=1\land y^{\prime}=1)
+\end{aligned}
+\]</span> 这里对后面几步说明一下，<span
+class="math inline">\(P(s&gt;t|y=1)\)</span>表示对于正例样本，模型预测其得分大于阈值<span
+class="math inline">\(t\)</span>的概率，<span
+class="math inline">\(P(s^{\prime}=t|y^{\prime}=0)\)</span>表示对于负例样本，模型预测得分等于<span
+class="math inline">\(t\)</span>的概率，这两个事件是相互独立的，因此二者的乘积就是<span
+class="math inline">\(P(s&gt;t\land s^{\prime}=t|y=1\land
+y^{\prime}=0)\)</span>，含义就是对于任意一个正例和负例，负例得分等于<span
+class="math inline">\(t\)</span>，正例得分大于<span
+class="math inline">\(t\)</span>的概率，对其在<span
+class="math inline">\(t\)</span>上积分相当于遍历所有的阈值<span
+class="math inline">\(t\)</span>，即对所有负例得分情况下正例得分大于负例得分的概率求和。</p>
+<p>我们也可以从上述第四行推导<span class="math inline">\(AUC =
+\int_{-\infty}^\infty
+P(s&gt;t|y=1)f_0(t)dt\)</span>看出来，我们是对<span
+class="math inline">\(P(s&gt;t|y=1)\)</span>在所有<span
+class="math inline">\(t\)</span>下加权求和，权重函数为<span
+class="math inline">\(f_0(t)\)</span>，表示负例得分为<span
+class="math inline">\(t\)</span>的概率，而<span
+class="math inline">\(P(s&gt;t|y=1)\)</span>表示正例得分大于<span
+class="math inline">\(t\)</span>（也是负例得分）的概率。</p>
+<p>最终结果<span class="math inline">\(P(s&gt;s^{\prime}|y=1\land
+y^{\prime}=1)\)</span>的含义是：<strong>对于任意一个正例和负例，模型评判正例得分大于负例得分的概率</strong>，这也是AUC的实际含义。</p>
+<h2 id="重写auc">重写AUC</h2>
+<p>从上述结论我们可以知道，如果要评估推荐系统的AUC，只需从测试集中标签为正的样本集和标签为负的样本集生成所有的正例和负例对，然后计算模型判别正例得分大于负例得分的概率即可，不需计算TPR和FPR再绘图算面积了。</p>
+<p>下面给出具体计算步骤：
+将测试样本的模型评分<strong>从小到大</strong>排序，对于第<span
+class="math inline">\(i\)</span>个正样本，其排名为<span
+class="math inline">\(r_i\)</span>，那么这个正样本之前有<span
+class="math inline">\(r_i-1\)</span>个样本，其中正样本个数为<span
+class="math inline">\(i-1\)</span>个，负样本个数为<span
+class="math inline">\(r_i-1-(i-1)=r_i-i\)</span>个，因此对于第<span
+class="math inline">\(i\)</span>个正样本，有<span
+class="math inline">\(r_i-i\)</span>个负样本得分小于正样本得分。设正样本个数为<span
+class="math inline">\(N_+\)</span>，负样本个数为<span
+class="math inline">\(N_-\)</span>，共有<span
+class="math inline">\(N_+N_-\)</span>个正负样本对，其中有<span
+class="math inline">\(\sum_{i=1}^{N_+}(r_i-i)\)</span>个正例得分大于负例得分，因此AUC的计算公式为：
+<span class="math display">\[
+AUC = \frac{\sum_{i=1}^{N_+}(r_i-i)}{N_+N_-} = \frac{\sum_{i=1}^{N_+}r_i
+- (N_+(N_+ + 1))/{2}}{N_+N_-}
+\]</span> 为求出AUC需要求出以下3个值： 1. <span
+class="math inline">\(N_+\)</span>：labels中正样本个数 2. <span
+class="math inline">\(N_-\)</span>：labels中负样本个数 3. <span
+class="math inline">\(\sum_{i=1}^{N_+}r_i\)</span>：所有正样本的排名之和</p>
+<p>下面给出代码实现： <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># scores为模型预测得分，labels为真实标签，1表示正样本，0表示负样本</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">auc</span>(<span class="hljs-params">scores,labels</span>):<br>    pos_num = <span class="hljs-built_in">sum</span>(labels)<br>    neg_num = <span class="hljs-built_in">len</span>(labels) - pos_num<br>    ranked_socres = <span class="hljs-built_in">sorted</span>([(score,label) <span class="hljs-keyword">for</span> score,label <span class="hljs-keyword">in</span> <span class="hljs-built_in">zip</span>(scores,labels)],key=<span class="hljs-keyword">lambda</span> x:x[<span class="hljs-number">0</span>])<br>    pos_rank_sum = <span class="hljs-built_in">sum</span>([rank+<span class="hljs-number">1</span> <span class="hljs-keyword">for</span> rank,(score,label) <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(ranked_socres,<span class="hljs-number">1</span>) <span class="hljs-keyword">if</span> label == <span class="hljs-number">1</span>]) <span class="hljs-comment"># rank从1开始</span><br>    auc = (pos_rank_sum - pos_num*(pos_num+<span class="hljs-number">1</span>)/<span class="hljs-number">2</span>)/(pos_num*neg_num)<br>    <span class="hljs-keyword">return</span> auc<br></code></pre></td></tr></table></figure></p>
+<h2 id="实验测试">实验测试</h2>
+<p>下面我们用一个例子来测试一下AUC函数，我们从正态分布<span
+class="math inline">\(N(0,1)\)</span>中生成400个负样本，从<span
+class="math inline">\(N(2,1)\)</span>中生成100个正样本，其分布如图所示：</p>
+<p><img src="https://pic.qinyu.space/image/20240810020420.png" srcset="/img/loading.gif" lazyload /></p>
+<p>测试代码如下： <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python">labels =[]<br>scores = []<br>neg_samples = np.random.normal(<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">400</span>)<br>labels.extend([<span class="hljs-number">0</span>]*<span class="hljs-number">400</span>)<br>scores.extend(neg_samples)<br>pos_samples = np.random.normal(<span class="hljs-number">2</span>,<span class="hljs-number">1</span>,<span class="hljs-number">100</span>)<br>labels.extend([<span class="hljs-number">1</span>]*<span class="hljs-number">100</span>)<br>scores.extend(pos_samples)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;auc:&#x27;</span>,auc(scores,labels))<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;roc_auc_score:&#x27;</span>,roc_auc_score(labels,scores))<br></code></pre></td></tr></table></figure> 输出结果： <figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">auc</span>: <span class="hljs-number">0</span>.<span class="hljs-number">91515</span><br><span class="hljs-attribute">roc_auc_score</span>: <span class="hljs-number">0</span>.<span class="hljs-number">91265</span><br></code></pre></td></tr></table></figure>
+可以看到AUC函数计算的结果与<code>sklearn.metrics.roc_auc_score</code>函数计算的结果非常接近。
+## AUC的性质 #### 1. 对类别不平衡问题的鲁棒性
+从公式可以看出，TPR的计算只局限于正例，而FPR的计算只局限于负例，如果模型能够很好地区分正例和负例的得分分布，那么数据的不平衡对AUC的影响不会很大，例如将上述实验正例采样数由100改为5，输出结果如下：
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">auc</span>: <span class="hljs-number">0</span>.<span class="hljs-number">8985</span><br><span class="hljs-attribute">roc_auc_score</span>: <span class="hljs-number">0</span>.<span class="hljs-number">896</span><br></code></pre></td></tr></table></figure>
+可以看出类别不平衡对AUC的影响并不大。而如果将正例的分布改为<span
+class="math inline">\(N(0.5,1)\)</span>，输出结果如下： <figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">auc</span>: <span class="hljs-number">0</span>.<span class="hljs-number">613775</span><br><span class="hljs-attribute">roc_auc_score</span>: <span class="hljs-number">0</span>.<span class="hljs-number">6112749999999999</span><br></code></pre></td></tr></table></figure>
+此时AUC的值有明显下降，因为此时正例和负例的得分分布重合度较高，模型很难区分正例和负例。
+#### 2. 适用于二分类问题
+AUC只关注正例和负例的得分排序，而不关注具体的得分值，这也符合推荐系统的应用情景，即对于用户感兴趣的物品和不感兴趣的物品，我们总是希望能推荐感兴趣的物品，即正例的得分要大于负例的得分，至于高多少并不重要。
+#### 3. AUC高不代表其他指标优秀
+AUC只关注预测的正负例的顺序关系，对于和label的拟合情况则不关注。比如正例得分都是0.2，负例得分都是0.1，AUC很完美，但是
+loss就会比较大（理想情况下，正例的得分应该接近 1，负例的得分应该接近
+0）。</p>
+<p>此外在不均衡的样本上，AUC的表现可能很好，但precision可能比较差。比如<span
+class="math inline">\(TP=80，FN=20，FP=100，TN=6000\)</span>，此时从ROC曲线上看效果很好，但是precision非常低。</p>
+<p><strong>【参考】</strong></p>
+<section class="footnotes">
+<div class="footnote-list">
+<ol>
+<li>
+<span id="fn:1" class="footnote-text"><span><a
+target="_blank" rel="noopener" href="https://aeyoo.net/2020/03/26/sklearn-roc-auc-score%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/">sklearn
+roc_auc_score源码解读</a>
+<a href="#fnref:1" rev="footnote" class="footnote-backref">
+↩︎</a></span></span>
+</li>
 </ol>
-<h3 id="修改dns服务器">3.2 修改DNS服务器</h3>
-<p>进入腾讯云控制台，修改的DNS服务器为3.1 第7步中 cloudflare
-提供的DNS服务器，如下所示：</p>
-<figure>
-<img src="https://pic.qinyu.space/image/image-20231204231234047.png" srcset="/img/loading.gif" lazyload
-alt="image-20231204231234047" />
-<figcaption aria-hidden="true">image-20231204231234047</figcaption>
-</figure>
-<p>DNS服务器更改后生效需要一段时间，少则几分钟，慢则需要几个小时</p>
-<p>过一段时间可以看到 DNS服务器已经修改成功了</p>
-<figure>
-<img src="https://pic.qinyu.space/image/image-20231204232327896.png" srcset="/img/loading.gif" lazyload
-alt="image-20231204232327896" />
-<figcaption aria-hidden="true">image-20231204232327896</figcaption>
-</figure>
-<p>返回 cloudflare，如果看到 <strong>“Cloudflare
-正在保护您的站点”</strong>说明已经配置成功了：</p>
-<figure>
-<img src="https://pic.qinyu.space/image/image-20231204233838791.png" srcset="/img/loading.gif" lazyload
-alt="image-20231204233838791" />
-<figcaption aria-hidden="true">image-20231204233838791</figcaption>
-</figure>
-<h3 id="设置github-page">3.3 设置Github page</h3>
-<p>进入github.io对应的仓库，进入 <code>Settings</code>：</p>
-<figure>
-<img src="https://pic.qinyu.space/image/image-20231204234453901.png" srcset="/img/loading.gif" lazyload
-alt="image-20231204234453901" />
-<figcaption aria-hidden="true">image-20231204234453901</figcaption>
-</figure>
-<p>进入左栏中的<code>pages</code>，在
-<code>Custom domain</code>中输入自己的域名，点击<code>save</code>，如果成功会显示下图：</p>
-<figure>
-<img src="https://pic.qinyu.space/image/image-20231204234850740.png" srcset="/img/loading.gif" lazyload
-alt="image-20231204234850740" />
-<figcaption aria-hidden="true">image-20231204234850740</figcaption>
-</figure>
-<p>这样就可以通过域名来访问自己的博客了，还可以在上图中勾选
-<code>Enforcrs HTTPS</code>，这样网站仅会通过https提供服务。</p>
-<div class="note note-info">
-            <p>如果如下图显示dns配置不正确，推测可能是使用了cloudflare后，GitHub验证DNS时返回的是cdn服务器的ip地址，而不是在cloudflare上开始配置的4个GitHubpage的ip地址，可以在线dig一下自己的域名验证一下。不过只要网站能通过域名正常访问就没什么问题。</p><p><img src="https://pic.qinyu.space/image/image-20231204235122269.png" srcset="/img/loading.gif" lazyload style="zoom:33%;" /></p>
-          </div>
+</div>
+</section>
 
                 
               </div>
@@ -592,34 +671,11 @@ alt="image-20231204234850740" />
             <div>
               <div class="post-metas my-3">
   
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" class="category-chain-item">博客搭建</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-    </div>
-  
   
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/cdn/" class="print-no-link">#cdn</a>
-      
-        <a href="/tags/cloudflare/" class="print-no-link">#cloudflare</a>
+        <a href="/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/" class="print-no-link">#推荐系统</a>
       
     </div>
   
@@ -631,8 +687,8 @@ alt="image-20231204234850740" />
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>博客搭建（一）| 利用cloudflare加速github博客访问</div>
-      <div>https://qinyu.space/博客搭建/利用cloudflare加速github主页访问/</div>
+      <div>详细解读AUC及其在推荐系统中的应用</div>
+      <div>https://qinyu.space/uncategorized/详细解读AUC及其在推荐系统中的应用/</div>
     </div>
     <div class="license-meta">
       
@@ -644,7 +700,7 @@ alt="image-20231204234850740" />
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年12月4日</div>
+          <div>2024年8月10日</div>
         </div>
       
       
@@ -682,18 +738,12 @@ alt="image-20231204234850740" />
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3RNN%E4%B8%AD%E7%9A%84%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1/" title="如何理解RNN中的梯度消失">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">如何理解RNN中的梯度消失</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E7%BA%BF%E6%80%A7%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/%E7%BA%BF%E6%80%A7%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" title="线性神经网络">
-                        <span class="hidden-mobile">线性神经网络</span>
+                      <a href="/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3RNN%E4%B8%AD%E7%9A%84%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1/" title="如何理解RNN中的梯度消失">
+                        <span class="hidden-mobile">如何理解RNN中的梯度消失</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

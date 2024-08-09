@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=auto>
+<html lang="zh-CN" data-default-color-scheme=light>
 
 
 
@@ -24,7 +24,7 @@
 <meta property="og:description" content="记录一些配置ubuntu的命令，以便后续查找">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-12-10T07:35:12.000Z">
-<meta property="article:modified_time" content="2023-12-23T08:55:49.365Z">
+<meta property="article:modified_time" content="2024-05-08T04:52:13.128Z">
 <meta property="article:author" content="QinYU">
 <meta property="article:tag" content="ubuntu">
 <meta name="twitter:card" content="summary_large_image">
@@ -216,6 +216,18 @@
           
           
             <li class="nav-item">
+              <a class="nav-link" href="/site-map/" target="_self">
+                <i class="iconfont icon-ic_fly"></i>
+                <span>导航</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
               <a class="nav-link" href="/about/" target="_self">
                 <i class="iconfont icon-user-fill"></i>
                 <span>关于</span>
@@ -280,7 +292,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          121 字
+          154 字
         
       </span>
     
@@ -405,7 +417,7 @@
               <p id="updated-time" class="note note-info" style="">
                 
                   
-                    本文最后更新于 2023年12月23日 下午
+                    本文最后更新于 2024年5月8日 下午
                   
                 
               </p>
@@ -431,6 +443,9 @@
 <h4 id="更改文件夹权限">3. 更改文件夹权限</h4>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo <span class="hljs-built_in">chmod</span> -R 777 /data<br></code></pre></td></tr></table></figure>
 <p><code>-R</code>表示会递归修改子文件夹下的文件权限</p>
+<h4 id="看不见共享文件夹">4. 看不见共享文件夹</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo vmhgfs-fuse .host:/ /mnt/hgfs -o allow_other<br></code></pre></td></tr></table></figure>
+<p>使用下述命令后，可以在<code>/mnt/hgfs</code>下看见共享文件</p>
 
                 
               </div>
