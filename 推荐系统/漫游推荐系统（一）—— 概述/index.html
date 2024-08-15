@@ -1,0 +1,976 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=light>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/logo.png">
+  <link rel="icon" href="/img/logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="QinYU">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="最近在学习推荐系统，Dive Into Deep Learning推荐系统篇介绍的非常好，本系列的大部分图也都该章，但是由于其代码实现使用的是mxnet深度学习框架，可能对于一些pytorch用户来说不太友好，此外关于一些细节的解释可能也不尽详细，因此本系列内容将在其基础上，使用pytorch框架实现推荐系统，并对一些细节进行更详细的解释。 需要说明的是，原文中介绍的推荐系统都有一定的年代了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="概述">
+<meta property="og:url" content="https://qinyu.space/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/%E6%BC%AB%E6%B8%B8%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%EF%BC%88%E4%B8%80%EF%BC%89%E2%80%94%E2%80%94%20%E6%A6%82%E8%BF%B0/index.html">
+<meta property="og:site_name" content="QinYU">
+<meta property="og:description" content="最近在学习推荐系统，Dive Into Deep Learning推荐系统篇介绍的非常好，本系列的大部分图也都该章，但是由于其代码实现使用的是mxnet深度学习框架，可能对于一些pytorch用户来说不太友好，此外关于一些细节的解释可能也不尽详细，因此本系列内容将在其基础上，使用pytorch框架实现推荐系统，并对一些细节进行更详细的解释。 需要说明的是，原文中介绍的推荐系统都有一定的年代了">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-08-15T08:54:18.000Z">
+<meta property="article:modified_time" content="2024-08-15T09:14:52.891Z">
+<meta property="article:author" content="QinYU">
+<meta property="article:tag" content="推荐系统">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>概述 - QinYU</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/reward.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"qinyu.space","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"❡"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":"G-1XHKDCG0YK"},"tencent":{"sid":null,"cid":null},"woyaola":21827805,"cnzz":null,"leancloud":{"app_id":"Mgc2jj2uZmdKVODXfj5LT8mt-MdYXbMMI","app_key":"3xZpYKXriWZv1kkJx3xvzmZV","server_url":"https://mgc2jj2u.api.lncldglobal.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=G-1XHKDCG0YK", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', 'G-1XHKDCG0YK');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+    <!-- 51.la Analytics -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript('//js.users.51.la/21827805.js');
+      }
+    </script>
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  <div>
+    <div class='real_mask' style="
+		background-color: rgba(0,0,0,0);
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		z-index: -777;
+	"></div>
+    <div id="banner_video_insert">
+    </div>
+    <div id='banner_img'>
+    </div>
+</div>
+<div id="banner"></div>
+
+  <header>
+    
+
+<div class="header-inner" style="height: 100vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>QinYU的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/site-map/" target="_self">
+                <i class="iconfont icon-ic_fly"></i>
+                <span>导航</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/null') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="概述"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        QinYU
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-08-15 16:54" pubdate>
+          2024年8月15日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          26 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+        <div class="scroll-down-bar">
+          <i class="iconfont icon-arrowdown"></i>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+    
+    <script type="text/javascript" src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/2.1.3/jquery.min.js"></script>
+    <div class="banner" id='banner'>
+
+        <div class="full-bg-img">
+
+            
+                <script>
+                    var ua = navigator.userAgent;
+                    var ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
+                        isIphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
+                        isAndroid = ua.match(/(Android)\s+([\d.]+)/),
+                        isMobile = isIphone || isAndroid;
+
+
+                    $.getJSON('/js/video_url.json', function (data)
+                    {
+                        if (true)
+                        {
+                            var video_list_length = data.length
+                            var seed = Math.random()
+                            index = Math.floor(seed * video_list_length)
+
+                            video_url = data[index][0]
+                            pre_show_image_url = data[index][1]
+
+                            banner_obj = document.getElementById("banner")
+                            banner_obj.style.cssText = "background: url('" + pre_show_image_url + "') no-repeat;"
+
+                            vvd_banner_obj = document.getElementById("banner_img")
+                            vvd_banner_content = "<img id='banner_img_item' src='" + pre_show_image_url + "'style='position: fixed; object-fit: cover; width: 100vw; height: 100vh; z-index: -999'>"
+                            vvd_banner_obj.innerHTML = vvd_banner_content
+                            
+                            if (!isMobile)
+                            {
+                                video_html_res = "<video id='video_item' style='position: fixed; object-fit: cover; width: 100vw; height: 100vh; z-index: -888;'  muted='muted' src=" + video_url + " autoplay='autoplay' loop='loop'></video>"
+                                document.getElementById("banner_video_insert").innerHTML = video_html_res;
+                            }
+                        }
+                    });
+
+                </script>
+                
+        </div>
+    </div>
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header" style = "color:#ddd">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">概述</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2024年8月15日 下午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <p>最近在学习推荐系统，<a
+target="_blank" rel="noopener" href="https://d2l.ai/chapter_recommender-systems/recsys-intro.html">Dive
+Into Deep
+Learning</a>推荐系统篇介绍的非常好，本系列的大部分图也都该章，但是由于其代码实现使用的是<code>mxnet</code>深度学习框架，可能对于一些<code>pytorch</code>用户来说不太友好，此外关于一些细节的解释可能也不尽详细，因此本系列内容将在其基础上，使用<code>pytorch</code>框架实现推荐系统，并对一些细节进行更详细的解释。</p>
+<p>需要说明的是，原文中介绍的推荐系统都有一定的年代了，相较于现在工业界的推荐算法，可能有些内容已经过时，但是其基本原理和思想仍然是非常有用的，因此本系列内容将以其为基础，逐步实现一些经典的推荐系统算法。</p>
+<span id="more"></span>
+<h2 id="为什么需要推荐系统">为什么需要推荐系统</h2>
+<p>推荐系统本质就是一个信息过滤系统，它可以帮助用户从众多的物品中快速找到自己感兴趣的物品，大大减少用户的时间成本。另一方面，推荐算法通常应用于广告、搜索等领域，可以帮助企业更好地推广自己的产品，具有重要的商业价值。</p>
+<h2 id="协同过滤">协同过滤</h2>
+<p>我们首先引出推荐系统中的一个重要概念，<strong>协同过滤（Collaborative
+Filtering）</strong>，其通过分析用户或者事物之间的相似性（“协同”），来预测用户可能感兴趣的内容并将此内容推荐给用户。这里的相似性是个很宽泛的概念，可以是用户特征（年龄、性别等）的相似性，也可以是用户行为（比如都喜欢看漫威电影）的相似性。举个例子，用户A和用户B都是22岁的男大学生，并且都在某平台看了很多漫威电影，在这种情况下，协同过滤可能会认为A和B的相似程度很高，于是可能会把A关注但B没有关注的内容推荐给B。</p>
+<p>总体而言，协同过滤可以分为两类：<strong>基于历史行为的协同过滤</strong>和<strong>基于模型的协同过滤</strong>。</p>
+<p>代表性的基于历史行为的CF技术是基于最近邻的CF，可以将其理解为某种聚类算法，它主要有两种实现方式：<strong>用户协同过滤</strong>和<strong>物品协同过滤</strong>。用户协同过滤是指给用户推荐和他兴趣相似的用户喜欢的物品，而物品协同过滤是指给用户推荐和他之前喜欢的物品相似的物品。这类模型在处理稀疏或者大规模数据时具有一定局限性，因为它需要计算项目之间的相似性。</p>
+<p>像矩阵分解这样的潜在因子模型是基于模型的CF的代表。基于模型的CF在处理稀疏数据时通常比基于历史行为的CF更有效，因为它可以通过学习用户和物品的潜在关系来填补缺失的数据。此外，基于模型的CF具有更高的灵活性和可扩展性，我们可以通过扩展多种神经网络结构来实现不同的推荐算法。</p>
+<p>一般来说，CF仅使用用户-项目交互数据来进行推荐和预测。除了这些数据，有些上下文信息可能对推荐系统也是有帮助的，比如用户的历史购买序列。当涉及不同的输入数据时，我们可能需要调整模型的结构，以便更好地捕捉数据之间的关系。</p>
+<h2 id="显式反馈和隐式反馈">显式反馈和隐式反馈</h2>
+<p>为了收集用户的偏好，系统会收集用户的反馈信息。在推荐系统中，我们通常会遇到两种类型的反馈：<strong>显式反馈（explicit）</strong>和<strong>隐式反馈（implicit）</strong>。显式反馈是指用户明确地表示对物品的喜好，比如用户给电影评分，这种反馈是非常直接的。而隐式反馈则是指用户的行为暗示了他们的喜好，比如用户浏览了某个商品或点击了某个网页，这可能意味着他对这个商品或网页感兴趣。</p>
+<p>显然，收集显示反馈需要用户主动参与，而许多用户并不愿意评分或评论，因此显示反馈的获取并不容易。相反，隐式反馈通常可以通过用户的行为数据来获取，比如用户的点击、购买、浏览等行为，这些数据通常是非常丰富的。因此，许多推荐系统都以隐式反馈为中心建模。需要注意，隐式反馈本质上是一种带噪声的数据，我们只能<strong>推测</strong>用户的喜好和意图。例如用户观看一个视频，我们并不能确定他是否真的喜欢这个视频，因为他可能只是随便点开看看。</p>
+<h2 id="推荐任务">推荐任务</h2>
+<p>在过去的几十年里，人们对许多推荐任务进行了研究。按应用领域，有电影推荐、新闻推荐、商品推荐等。此外还可以根据反馈和输入数据的类型来区分任务。例如，评分预测任务旨在预测用户对物品的显式评分，Top-N推荐任务旨根据隐式反馈推荐给用户最可能感兴趣的物品。如果输入中还包含了序列信息，我们还可以构建序列感知推荐。另一种流行了任务称为点击率预测，它也是基于隐式反馈，但会利用到各种分类特征。</p>
+<h2 id="movielens数据集">MovieLens数据集</h2>
+<h3 id="获取数据集">获取数据集</h3>
+<p>在本系列中，我们将使用一个非常经典的数据集，MovieLens
+100k数据集，它包含了用户对电影的评分数据。MovieLens数据集是一个开放的数据集，包含943个用户对1682部电影的10万条评分数据，从1到5分不等。该数据集已经被清洗过以确保每个用户至少评分20部电影。我们可以下载<a
+target="_blank" rel="noopener" href="http://files.grouplens.org/datasets/movielens/ml-100k.zip">ml-100k.zip</a>并解压<code>u.data</code>文件，该文件包含了用户对电影的评分数据，每一行的格式为<code>user_id</code>、<code>movie_id</code>、<code>rating</code>和<code>timestamp</code>。</p>
+<p>我们将在本节实现数据接口，用于加载和处理MovieLens数据集。我们先导入一些包确保后面实验能正确运行，<a
+target="_blank" rel="noopener" href="https://d2l.ai/chapter_appendix-tools-for-deep-learning/d2l.html"><code>d2l</code></a>是dive
+into deep
+learning提供的一个工具包，可以通过<code>pip install d2l</code>安装
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd<br><span class="hljs-keyword">from</span> d2l <span class="hljs-keyword">import</span> torch <span class="hljs-keyword">as</span> d2l<br><span class="hljs-keyword">from</span> collections <span class="hljs-keyword">import</span> defaultdict<br><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> train_test_split<br><span class="hljs-keyword">from</span> torch.utils.data <span class="hljs-keyword">import</span> TensorDataset,DataLoader<br></code></pre></td></tr></table></figure> 然后下载MovieLens
+100k并以<code>DataFrame</code>格式加载数据： <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python">d2l.DATA_HUB[<span class="hljs-string">&#x27;ml-100k&#x27;</span>] = (<br>    <span class="hljs-string">&#x27;https://files.grouplens.org/datasets/movielens/ml-100k.zip&#x27;</span>,<br>    <span class="hljs-string">&#x27;cd4dcac4241c8a4ad7badc7ca635da8a69dddb83&#x27;</span>)<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">read_data_ml100k</span>():<br>    data_dir = d2l.download_extract(<span class="hljs-string">&#x27;ml-100k&#x27;</span>)<br>    names = [<span class="hljs-string">&#x27;user_id&#x27;</span>,<span class="hljs-string">&#x27;item_id&#x27;</span>,<span class="hljs-string">&#x27;rating&#x27;</span>,<span class="hljs-string">&#x27;timestamp&#x27;</span>]<br>    data = pd.read_csv(os.path.join(data_dir,<span class="hljs-string">&#x27;u.data&#x27;</span>),<br>                       sep = <span class="hljs-string">&#x27;\t&#x27;</span>,names = names,engine=<span class="hljs-string">&#x27;python&#x27;</span>)<br>    num_users = data[<span class="hljs-string">&#x27;user_id&#x27;</span>].unique().shape[<span class="hljs-number">0</span>]<br>    num_items = data[<span class="hljs-string">&#x27;item_id&#x27;</span>].unique().shape[<span class="hljs-number">0</span>]<br>    <span class="hljs-keyword">return</span> data,num_users,num_items<br></code></pre></td></tr></table></figure></p>
+<h3 id="数据集信息">数据集信息</h3>
+<p>我们先加载数据集并查看前五行的记录： <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">data,num_users,num_items = read_data_ml100k()<br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&#x27;number of users: <span class="hljs-subst">&#123;num_users&#125;</span>, number of items: <span class="hljs-subst">&#123;num_items&#125;</span>&#x27;</span>)<br><span class="hljs-built_in">print</span>(data.head(<span class="hljs-number">5</span>))<br></code></pre></td></tr></table></figure> 输出如下：
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">number</span> of users: <span class="hljs-number">943</span>, number of items: <span class="hljs-number">1682</span><br>   <span class="hljs-attribute">user_id</span>  item_id  rating  timestamp<br><span class="hljs-attribute">0</span>      <span class="hljs-number">196</span>      <span class="hljs-number">242</span>       <span class="hljs-number">3</span>  <span class="hljs-number">881250949</span><br><span class="hljs-attribute">1</span>      <span class="hljs-number">186</span>      <span class="hljs-number">302</span>       <span class="hljs-number">3</span>  <span class="hljs-number">891717742</span><br><span class="hljs-attribute">2</span>       <span class="hljs-number">22</span>      <span class="hljs-number">377</span>       <span class="hljs-number">1</span>  <span class="hljs-number">878887116</span><br><span class="hljs-attribute">3</span>      <span class="hljs-number">244</span>       <span class="hljs-number">51</span>       <span class="hljs-number">2</span>  <span class="hljs-number">880606923</span><br><span class="hljs-attribute">4</span>      <span class="hljs-number">166</span>      <span class="hljs-number">346</span>       <span class="hljs-number">1</span>  <span class="hljs-number">886397596</span><br></code></pre></td></tr></table></figure>
+可以看出每行是个四元组，包含<code>user_id</code>、<code>item_id</code>、<code>rating</code>和<code>timestamp</code>。我们可以创建一个<span
+class="math inline">\(m \times n\)</span>的评分矩阵<span
+class="math inline">\(R\)</span>，其中<span
+class="math inline">\(m\)</span>是用户数，<span
+class="math inline">\(n\)</span>是物品数。如果用户<span
+class="math inline">\(u\)</span>对物品<span
+class="math inline">\(i\)</span>评分了<span
+class="math inline">\(r\)</span>，那么<span
+class="math inline">\(R_{u,i} = r\)</span>，否则<span
+class="math inline">\(R_{u,i} =
+0\)</span>。矩阵中的值大部分是0，因为用户并没有评分大多数电影。我们可以用稀疏度（sparsity）来衡量矩阵中的非零元素的比例：
+<span class="math display">\[
+\text{sparsity} = \frac{\text{number of zero entries}}{m \times n}
+\]</span> 我们可以通过以下代码计算稀疏度： <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">sparsity = <span class="hljs-number">1</span> - <span class="hljs-built_in">len</span>(data)/ (num_users * num_items)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&#x27;sparsity: <span class="hljs-subst">&#123;sparsity:f&#125;</span>&#x27;</span>)<br></code></pre></td></tr></table></figure> 输出如下：
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">sparsity</span>: <span class="hljs-number">0</span>.<span class="hljs-number">936953</span><br></code></pre></td></tr></table></figure>
+可以看出，这个数据集是非常稀疏的，而现实的推荐系统数据集通常更稀疏。接下来我们绘制评分的分布图，似乎呈现正态分布，大部分评分集中在3-4之间：
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">d2l.plt.hist(data[<span class="hljs-string">&#x27;rating&#x27;</span>], bins=<span class="hljs-number">5</span>, ec=<span class="hljs-string">&#x27;black&#x27;</span>)<br>d2l.plt.xlabel(<span class="hljs-string">&#x27;Rating&#x27;</span>)<br>d2l.plt.ylabel(<span class="hljs-string">&#x27;Count&#x27;</span>)<br>d2l.plt.title(<span class="hljs-string">&#x27;Distribution of Ratings in MovieLens 100K&#x27;</span>)<br>d2l.plt.show()<br></code></pre></td></tr></table></figure> <img
+src="https://pic.qinyu.space/image/20240815152645.png" srcset="/img/loading.gif" lazyload /></p>
+<h3 id="划分数据集">划分数据集</h3>
+<p>我们将数据集划分为训练集和测试集，下面的<code>split_data_ml100k</code>函数提供<code>random</code>和<code>seq-aware</code>两种划分方式。<code>random</code>模式下不考虑时间戳，100k个交互条目中90%用于训练，10%用于测试，这里我们使用<code>sklearn.model_selection.train_test_split</code>来实现。<code>seq-aware</code>模式下，我们按时间戳对每个用户的交互进行排序，选取用户最后交互的数据作为作为测试，其余作为训练，这种模式将在序列感知的推荐系统章节使用。
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> train_test_split<br><span class="hljs-comment"># @save</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">split_data_ml100k</span>(<span class="hljs-params">data: pd.DataFrame, split_mode=<span class="hljs-string">&#x27;random&#x27;</span>, test_ratio=<span class="hljs-number">0.1</span></span>):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    Split the dataset into training and testing sets.</span><br><span class="hljs-string"></span><br><span class="hljs-string">    Parameters:</span><br><span class="hljs-string">    data (pd.DataFrame): The input dataset.</span><br><span class="hljs-string">    split_mode (str, optional): The mode for splitting the dataset. Can be &#x27;random&#x27; or &#x27;seq-aware&#x27;. Defaults to &#x27;random&#x27;.</span><br><span class="hljs-string">    test_ratio (float, optional): The ratio of the dataset to be used for testing. Defaults to 0.1.</span><br><span class="hljs-string"></span><br><span class="hljs-string">    Returns:</span><br><span class="hljs-string">    tuple: A tuple of two pd.DataFrame objects, including the training set and the testing set.</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <span class="hljs-keyword">if</span> split_mode == <span class="hljs-string">&#x27;seq-aware&#x27;</span>:<br>        <span class="hljs-comment"># 按用户和时间戳排序</span><br>        sorted_data = data.sort_values([<span class="hljs-string">&#x27;user_id&#x27;</span>,<span class="hljs-string">&#x27;timestamp&#x27;</span>])<br>        <span class="hljs-comment"># 创建两个dataframe</span><br>        train_data = pd.DataFrame(columns=data.columns)<br>        test_data = pd.DataFrame(columns=data.columns)<br>        <span class="hljs-comment"># 按用户分组</span><br>        <span class="hljs-keyword">for</span> user_id, group <span class="hljs-keyword">in</span> sorted_data.groupby(<span class="hljs-string">&#x27;user_id&#x27;</span>):<br>            train_data = pd.concat([train_data, group.iloc[:-<span class="hljs-number">1</span>]], ignore_index=<span class="hljs-literal">True</span>)<br>            <span class="hljs-comment"># 将时间戳最大的一个样本放入测试集</span><br>            test_data = pd.concat([test_data, group.iloc[[-<span class="hljs-number">1</span>]]], ignore_index=<span class="hljs-literal">True</span>)<br>        <span class="hljs-keyword">return</span> train_data, test_data<br>    <span class="hljs-keyword">else</span>:<br>        train_data, test_data = train_test_split(data, test_size=test_ratio)<br>        <span class="hljs-keyword">return</span> train_data, test_data<br></code></pre></td></tr></table></figure></p>
+<h3 id="加载数据集">加载数据集</h3>
+<p>在将数据集划分为训练集和测试集两个<code>DataFrame</code>后，我们需要将其转换为列表和字典/矩阵格式，以便后续的模型训练和评估。下面的<code>load_data_ml100k</code>函数按行读取<code>DataFrame</code>，并存储在<code>users</code>、<code>items</code>和<code>scores</code>列表中。当反馈设置为explicit时，<code>scores</code>记录实际评分，交互<code>inter</code>是一个评分矩阵；当反馈设置为implicit时，<code>scores</code>记录评分为1（表示有交互），交互<code>inter</code>是一个字典，键是用户索引，值是用户交互的物品索引列表，并且物品列表会按时间戳排序（<code>split_data_ml100k</code>中已经排序了）。
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">load_data_ml100k</span>(<span class="hljs-params">data, num_users, num_items, feedback=<span class="hljs-string">&#x27;explicit&#x27;</span></span>):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    Load data for the ML-100K dataset.</span><br><span class="hljs-string"></span><br><span class="hljs-string">    Args:</span><br><span class="hljs-string">        data (DataFrame): The input data containing user-item interactions.</span><br><span class="hljs-string">        num_users (int): The total number of users.</span><br><span class="hljs-string">        num_items (int): The total number of items.</span><br><span class="hljs-string">        feedback (str, optional): The type of feedback. Defaults to &#x27;explicit&#x27;.</span><br><span class="hljs-string"></span><br><span class="hljs-string">    Returns:</span><br><span class="hljs-string">        tuple: A tuple containing the lists of users, items, scores, and the interaction matrix or dictionary.</span><br><span class="hljs-string"></span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <span class="hljs-comment"># 从0开始编号用户和物品</span><br>    data[<span class="hljs-string">&#x27;user_id&#x27;</span>] = data[<span class="hljs-string">&#x27;user_id&#x27;</span>] - <span class="hljs-number">1</span><br>    data[<span class="hljs-string">&#x27;item_id&#x27;</span>] = data[<span class="hljs-string">&#x27;item_id&#x27;</span>] - <span class="hljs-number">1</span><br>    users, items, scores = [], [], []<br>    <span class="hljs-comment"># 如果是显性反馈，记录评分，否则记录是否有交互</span><br>    inter = torch.zeros((num_items, num_users)) <span class="hljs-keyword">if</span> feedback == <span class="hljs-string">&#x27;explicit&#x27;</span> <span class="hljs-keyword">else</span> defaultdict(<span class="hljs-built_in">list</span>)<br>    <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> data.itertuples():<br>        <span class="hljs-comment"># 生成数据列表</span><br>        user_id, item_id, score = <span class="hljs-built_in">int</span>(line[<span class="hljs-number">1</span>]), <span class="hljs-built_in">int</span>(line[<span class="hljs-number">2</span>]), <span class="hljs-built_in">int</span>(line[<span class="hljs-number">3</span>])<br>        users.append(user_id)<br>        items.append(item_id)<br>        scores.append(score <span class="hljs-keyword">if</span> feedback == <span class="hljs-string">&#x27;explicit&#x27;</span> <span class="hljs-keyword">else</span> <span class="hljs-number">1</span>)<br>        <span class="hljs-comment"># 记录交互信息</span><br>        <span class="hljs-keyword">if</span> feedback == <span class="hljs-string">&#x27;explicit&#x27;</span>:<br>            inter[item_id, user_id] = score<br>        <span class="hljs-keyword">else</span>:<br>            inter[user_id].append(item_id)<br>    <span class="hljs-keyword">return</span> users, items, scores, inter<br></code></pre></td></tr></table></figure>
+最后我们用<code>split_and_load_ml100k</code>函数将上述函数整合在一起，方便后续实验使用：
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">split_and_load_ml100k</span>(<span class="hljs-params">split_mode=<span class="hljs-string">&#x27;seq_aware&#x27;</span>, feedback=<span class="hljs-string">&#x27;explicit&#x27;</span>, test_ratio=<span class="hljs-number">0.1</span>, batch_size=<span class="hljs-number">256</span>, device=<span class="hljs-string">&#x27;cpu&#x27;</span></span>):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    Splits the ML100K dataset into train and test sets, loads the data into tensors, and creates data iterators.</span><br><span class="hljs-string"></span><br><span class="hljs-string">    Args:</span><br><span class="hljs-string">        split_mode (str, optional): The split mode for dividing the dataset. Defaults to &#x27;seq_aware&#x27;.</span><br><span class="hljs-string">        feedback (str, optional): The type of feedback in the dataset. Defaults to &#x27;explicit&#x27;.</span><br><span class="hljs-string">        test_ratio (float, optional): The ratio of the dataset to be used for testing. Defaults to 0.1.</span><br><span class="hljs-string">        batch_size (int, optional): The batch size for the data iterators. Defaults to 256.</span><br><span class="hljs-string">        device (str, optional): The device to load the data onto. Defaults to &#x27;cpu&#x27;.</span><br><span class="hljs-string"></span><br><span class="hljs-string">    Returns:</span><br><span class="hljs-string">        tuple: A tuple containing the number of users, number of items, training data iterator, and testing data iterator.</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <br>    <span class="hljs-comment"># 读取数据</span><br>    data, num_users, num_items = read_data_ml100k()<br>    <span class="hljs-comment"># 划分数据集</span><br>    train_data, test_data = split_data_ml100k(data, split_mode, test_ratio)<br>    <span class="hljs-comment"># 加载训练数据集</span><br>    train_u, train_i, train_r, _ = load_data_ml100k(<br>        train_data, num_users, num_items, feedback)<br>    <span class="hljs-comment"># 加载测试数据集</span><br>    test_u, test_i, test_r, _ = load_data_ml100k(<br>        test_data, num_users, num_items, feedback)<br>    <span class="hljs-comment"># 将数据转换为tensor并包装为dataset</span><br>    train_set = TensorDataset(torch.tensor(train_u).to(device), <br>                              torch.tensor(train_i).to(device), <br>                              torch.tensor(train_r, dtype=torch.<span class="hljs-built_in">float</span>).to(device))<br>    test_set = TensorDataset(torch.tensor(test_u).to(device), <br>                             torch.tensor(test_i).to(device), <br>                             torch.tensor(test_r, dtype=torch.<span class="hljs-built_in">float</span>).to(device))<br>    <span class="hljs-comment"># 生成数据迭代器</span><br>    train_iter = torch.utils.data.DataLoader(train_set, batch_size, shuffle=<span class="hljs-literal">True</span>)<br>    test_iter = torch.utils.data.DataLoader(test_set, batch_size)<br>    <span class="hljs-keyword">return</span> num_users, num_items,train_iter,test_iter<br></code></pre></td></tr></table></figure></p>
+<p>我们用下面测试代码查看数据集加载情况： <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python">_, _, train_iter, test_iter = split_and_load_ml100k()<br><span class="hljs-keyword">for</span> data <span class="hljs-keyword">in</span> train_iter:<br>    users, items, scores = data[<span class="hljs-number">0</span>], data[<span class="hljs-number">1</span>], data[<span class="hljs-number">2</span>]<br>    <span class="hljs-built_in">print</span>(users.shape, items.shape, scores.shape)<br>    <span class="hljs-built_in">print</span>(users[:<span class="hljs-number">5</span>], items[:<span class="hljs-number">5</span>], scores[:<span class="hljs-number">5</span>])<br>    <span class="hljs-keyword">break</span><br></code></pre></td></tr></table></figure>
+可以看出每个批次的数据包括用户索引、物品索引和评分，长度为批量大小。
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">torch</span>.Size([<span class="hljs-number">256</span>]) torch.Size([<span class="hljs-number">256</span>]) torch.Size([<span class="hljs-number">256</span>])<br><span class="hljs-attribute">tensor</span>([<span class="hljs-number">108</span>, <span class="hljs-number">511</span>, <span class="hljs-number">378</span>, <span class="hljs-number">721</span>, <span class="hljs-number">733</span>]) tensor([<span class="hljs-number">401</span>,  <span class="hljs-number">96</span>, <span class="hljs-number">562</span>, <span class="hljs-number">120</span>, <span class="hljs-number">481</span>]) tensor([<span class="hljs-number">4</span>., <span class="hljs-number">5</span>., <span class="hljs-number">2</span>., <span class="hljs-number">5</span>., <span class="hljs-number">2</span>.])<br></code></pre></td></tr></table></figure> 在下一节我们将实现基于矩阵分解的推荐系统。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <!-- 添加打赏模块 -->
+            <div class="reward-container">
+              
+                <button id="rewardBtn" class="reward-btn">
+                  
+                    Buy me a coffee ⛾
+                    
+                </button>
+                
+                <div id="rewardImgContainer" class="reward-img-container">
+                  <div class="singleImgContainer">
+                    <img id="wechatImg" class="reward-img" src="/img/wechatpay.jpg" srcset="/img/loading.gif" lazyload alt="微信二维码">
+                    <p class="wechatPay">微信支付</p>
+                  </div>
+                  <div class="singleImgContainer">
+                    <img id="alipayImg" class="reward-img" src="/img/alipay.jpg" srcset="/img/loading.gif" lazyload alt="支付宝二维码">
+                    <p class="aliPay">支付宝支付</p>
+                  </div>
+                </div>
+                
+            </div>
+
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/" class="category-chain-item">推荐系统</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/" class="print-no-link">#推荐系统</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>概述</div>
+      <div>https://qinyu.space/推荐系统/漫游推荐系统（一）—— 概述/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>QinYU</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年8月15日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/%E8%AF%A6%E7%BB%86%E8%A7%A3%E8%AF%BBAUC%E5%8F%8A%E5%85%B6%E5%9C%A8%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/" title="详细解读AUC及其在推荐系统中的应用">
+                        <span class="hidden-mobile">详细解读AUC及其在推荐系统中的应用</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://cdn.staticfile.org/waline/2.15.5/waline.min.css')
+      Fluid.utils.createScript('https://cdn.staticfile.org/waline/2.15.5/waline.min.js', function() {
+        var options = Object.assign(
+          {"serverURL":"comment.qinyu.space","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+  <span style="color: #ddd;">Copyright© 2023 QinYU</span>
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="/js/DynamicLine.js"></script>
+<script src="/js/reward.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
