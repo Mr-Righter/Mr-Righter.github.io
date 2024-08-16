@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://pic.qinyu.space/image/20240816182844.png">
 <meta property="article:published_time" content="2024-08-16T10:51:35.000Z">
-<meta property="article:modified_time" content="2024-08-16T11:06:19.533Z">
+<meta property="article:modified_time" content="2024-08-16T11:21:23.977Z">
 <meta property="article:author" content="QinYU">
 <meta property="article:tag" content="推荐系统">
 <meta name="twitter:card" content="summary_large_image">
@@ -459,11 +459,11 @@ class="math inline">\(i\)</span>行。对于给定的物品<span
 class="math inline">\(i\)</span>，<span
 class="math inline">\(\mathbf{q}_i\)</span>向量中的每个元素可以理解为该物品拥有这些特征的程度，对于给定的用户<span
 class="math inline">\(u\)</span>，<span
-class="math inline">\(\bf{p}_u\)</span>向量中的每个元素可以理解为用户<span
+class="math inline">\(\mathbf{p}_u\)</span>向量中的每个元素可以理解为用户<span
 class="math inline">\(u\)</span>对这些特征的喜好程度。用户<span
 class="math inline">\(u\)</span>对物品<span
 class="math inline">\(i\)</span>的评分<span
-class="math inline">\(R_{ui}\)</span>可以通过两个向量的内积计算得到：
+class="math inline">\(\hat{\mathbf{R}}_{ui}\)</span>可以通过两个向量的内积计算得到：
 <span class="math display">\[
 \hat{\mathbf{R}}_{ui} = \mathbf{p}_u \mathbf{q}_i^{\top}
 \]</span> 整体的预测评分矩阵<span
@@ -491,7 +491,7 @@ Squared Error, MSE），目标函数如下： <span class="math display">\[
 \mathbf{Q}
 \|^2_F + b_u^2 + b_i^2 )
 \]</span> 其中<span
-class="math inline">\(\mathcal{K}\)</span>是用户-物品交互矩阵<span
+class="math inline">\(\mathcal{K}\)</span>是训练集中用户-物品交互矩阵<span
 class="math inline">\(\mathbf{R}\)</span>中的非空元素集合，即<span
 class="math inline">\(\mathcal{K} = \{ (u, i) | \mathbf{R}_{ui} \text{
 is known}
