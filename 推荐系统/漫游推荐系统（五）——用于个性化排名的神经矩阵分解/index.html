@@ -1,0 +1,1055 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=light>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/logo.png">
+  <link rel="icon" href="/img/logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="QinYU">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="用于个性化排名的神经协同过滤 本章介绍用于隐式反馈建模的神经协同过滤框架（Neural Collaborative Filtering，NCF）。隐式反馈在推荐系统中普遍存在，点击、购买和观看等行为是常见的隐式反馈，这些反馈易于收集且一定程度上反映了用户的偏好。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="漫游推荐系统（五）——用于个性化排名的神经矩阵分解">
+<meta property="og:url" content="https://qinyu.space/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/%E6%BC%AB%E6%B8%B8%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E7%94%A8%E4%BA%8E%E4%B8%AA%E6%80%A7%E5%8C%96%E6%8E%92%E5%90%8D%E7%9A%84%E7%A5%9E%E7%BB%8F%E7%9F%A9%E9%98%B5%E5%88%86%E8%A7%A3/index.html">
+<meta property="og:site_name" content="QinYU">
+<meta property="og:description" content="用于个性化排名的神经协同过滤 本章介绍用于隐式反馈建模的神经协同过滤框架（Neural Collaborative Filtering，NCF）。隐式反馈在推荐系统中普遍存在，点击、购买和观看等行为是常见的隐式反馈，这些反馈易于收集且一定程度上反映了用户的偏好。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic.qinyu.space/image/20240818193511.png">
+<meta property="og:image" content="https://pic.qinyu.space/image/20240819152930.png">
+<meta property="og:image" content="https://pic.qinyu.space/image/20240819153903.png">
+<meta property="article:published_time" content="2024-08-19T07:48:13.000Z">
+<meta property="article:modified_time" content="2024-08-19T07:54:27.340Z">
+<meta property="article:author" content="QinYU">
+<meta property="article:tag" content="推荐系统">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pic.qinyu.space/image/20240818193511.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>漫游推荐系统（五）——用于个性化排名的神经矩阵分解 - QinYU</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/reward.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"qinyu.space","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"❡"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":"G-1XHKDCG0YK"},"tencent":{"sid":null,"cid":null},"woyaola":21827805,"cnzz":null,"leancloud":{"app_id":"Mgc2jj2uZmdKVODXfj5LT8mt-MdYXbMMI","app_key":"3xZpYKXriWZv1kkJx3xvzmZV","server_url":"https://mgc2jj2u.api.lncldglobal.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=G-1XHKDCG0YK", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', 'G-1XHKDCG0YK');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+    <!-- 51.la Analytics -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript('//js.users.51.la/21827805.js');
+      }
+    </script>
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  <div>
+    <div class='real_mask' style="
+		background-color: rgba(0,0,0,0);
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		z-index: -777;
+	"></div>
+    <div id="banner_video_insert">
+    </div>
+    <div id='banner_img'>
+    </div>
+</div>
+<div id="banner"></div>
+
+  <header>
+    
+
+<div class="header-inner" style="height: 100vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>QinYU的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/site-map/" target="_self">
+                <i class="iconfont icon-ic_fly"></i>
+                <span>导航</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/null') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="漫游推荐系统（五）——用于个性化排名的神经矩阵分解"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        QinYU
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-08-19 15:48" pubdate>
+          2024年8月19日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          26 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+        <div class="scroll-down-bar">
+          <i class="iconfont icon-arrowdown"></i>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+    
+    <script type="text/javascript" src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/2.1.3/jquery.min.js"></script>
+    <div class="banner" id='banner'>
+
+        <div class="full-bg-img">
+
+            
+                <script>
+                    var ua = navigator.userAgent;
+                    var ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
+                        isIphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
+                        isAndroid = ua.match(/(Android)\s+([\d.]+)/),
+                        isMobile = isIphone || isAndroid;
+
+
+                    $.getJSON('/js/video_url.json', function (data)
+                    {
+                        if (true)
+                        {
+                            var video_list_length = data.length
+                            var seed = Math.random()
+                            index = Math.floor(seed * video_list_length)
+
+                            video_url = data[index][0]
+                            pre_show_image_url = data[index][1]
+
+                            banner_obj = document.getElementById("banner")
+                            banner_obj.style.cssText = "background: url('" + pre_show_image_url + "') no-repeat;"
+
+                            vvd_banner_obj = document.getElementById("banner_img")
+                            vvd_banner_content = "<img id='banner_img_item' src='" + pre_show_image_url + "'style='position: fixed; object-fit: cover; width: 100vw; height: 100vh; z-index: -999'>"
+                            vvd_banner_obj.innerHTML = vvd_banner_content
+                            
+                            if (!isMobile)
+                            {
+                                video_html_res = "<video id='video_item' style='position: fixed; object-fit: cover; width: 100vw; height: 100vh; z-index: -888;'  muted='muted' src=" + video_url + " autoplay='autoplay' loop='loop'></video>"
+                                document.getElementById("banner_video_insert").innerHTML = video_html_res;
+                            }
+                        }
+                    });
+
+                </script>
+                
+        </div>
+    </div>
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header" style = "color:#ddd">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">漫游推荐系统（五）——用于个性化排名的神经矩阵分解</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2024年8月19日 下午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="用于个性化排名的神经协同过滤">用于个性化排名的神经协同过滤</h1>
+<p>本章介绍用于隐式反馈建模的神经协同过滤框架（Neural Collaborative
+Filtering，NCF）。隐式反馈在推荐系统中普遍存在，点击、购买和观看等行为是常见的隐式反馈，这些反馈易于收集且一定程度上反映了用户的偏好。</p>
+<span id="more"></span>
+<p><a
+target="_blank" rel="noopener" href="https://dl.acm.org/doi/pdf/10.1145/3038912.3052569"><strong>NeuMF</strong></a>是NCF中的一种，即Neural
+Matrix
+Factorization，该模型旨在处理带有隐式反馈的个性化排名任务。该模型利用神经网络的灵活性和非线性来代替矩阵分解的点积。<strong>NeuMF模型由两部分组成：多层感知机（MLP）和广义矩阵分解（GMF）</strong>，这两个子网络的输出被连接起来以计算最后的预测分数。与AutoRec中的评分预测任务不同，NeuMF旨在根据隐式反馈为每个用户生成排名推荐列表，我们将上一节中介绍的个性化排名损失函数来训练该模型。</p>
+<h2 id="neumf模型">NeuMF模型</h2>
+<p>NeuMF模型由两个子网络组成：多层感知机（MLP）和广义矩阵分解（GMF），如下图所示：</p>
+<p><img src="https://pic.qinyu.space/image/20240818193511.png" srcset="/img/loading.gif" lazyload /></p>
+<p>GMF是矩阵分解的神经网络版本，其输入是用户向量和物品向量的Hadamard积（逐元素乘积），模型由两层网络构成：
+<span class="math display">\[
+\begin{split}\mathbf{x} = \mathbf{p}_u \odot \mathbf{q}_i \\
+\hat{y}_{ui} = \alpha(\mathbf{h}^\top \mathbf{x})\end{split}
+\]</span> 其中<span class="math inline">\(x \in
+\mathbb{R}^k\)</span>是用户向量<span class="math inline">\(\mathbf{p}_u
+\in \mathbb{R}^k\)</span>和物品向量<span
+class="math inline">\(\mathbf{q}_i \in
+\mathbb{R}^k\)</span>的逐元素乘积。<span
+class="math inline">\(\mathbf{q}_i\)</span>可以理解为物品<span
+class="math inline">\(i\)</span>拥有这些特征的程度，是物品嵌入矩阵<span
+class="math inline">\(\mathbf{Q} \in \mathbb{R}^{n \times
+k}\)</span>的第<span class="math inline">\(i\)</span>行；<span
+class="math inline">\(\mathbf{p}_u\)</span>可以理解为用户<span
+class="math inline">\(u\)</span>对这些特征的偏好程度，是用户嵌入矩阵<span
+class="math inline">\(\mathbf{P} \in \mathbb{R}^{m \times
+k}\)</span>的第<span class="math inline">\(u\)</span>行。<span
+class="math inline">\(x\)</span>可以理解为用户对这些特征的最后评分。<span
+class="math inline">\(\alpha\)</span>是激活函数，<span
+class="math inline">\(\mathbf{h} \in
+\mathbb{R}^k\)</span>是权重向量，<span
+class="math inline">\(\hat{y}_{ui}\)</span>是用户<span
+class="math inline">\(u\)</span>对物品<span
+class="math inline">\(i\)</span>的预测评分。</p>
+<p>相较于传统的矩阵分解<span class="math inline">\(\hat{y}_{ui} =
+\mathbf{p}_u \mathbf{q}_i^\top\)</span>，GMF不是对<span
+class="math inline">\(\mathbf{p}_u \odot
+\mathbf{q}_i\)</span>直接求和（<span class="math inline">\(\mathbf{p}_u
+\mathbf{q}_i^\top\)</span>相当于<span
+class="math inline">\(\text{sum}(\mathbf{p}_u \odot
+\mathbf{q}_i)\)</span>），而是通过一个权重向量<span
+class="math inline">\(\mathbf{h}\)</span>来对各个特征得分进行加权，此外，GMF的输出还通过激活函数<span
+class="math inline">\(\alpha\)</span>引入非线性变换。</p>
+<p>NeuMF模型的另一部分是MLP。为了增强模型的表达能力和灵活性，MLP自网络并没有共享GMF的用户和物品嵌入矩阵，而是又引入了两个独立的用户嵌入矩阵<span
+class="math inline">\(\mathbf{U} \in \mathbb{R}^{m \times
+d}\)</span>和物品嵌入矩阵<span class="math inline">\(\mathbf{V} \in
+\mathbb{R}^{n \times
+d}\)</span>。MLP将用户向量和物品向量拼接后作为输入。通过复杂的连接和非线性变换，MLP子网络能够对用户特征和物品特征之间复杂的交互关系进行建模。MLP子网络定义如下：
+<span class="math display">\[
+\begin{split}\begin{aligned}
+z^{(1)} &amp;= \phi_1(\mathbf{U}_u, \mathbf{V}_i) = \text{concat}\left[
+\mathbf{U}_u, \mathbf{V}_i \right] \\
+\phi^{(2)}(z^{(1)})  &amp;= \alpha^1(\mathbf{W}^{(2)} z^{(1)} + b^{(2)})
+\\
+&amp;... \\
+\phi^{(L)}(z^{(L-1)}) &amp;= \alpha^L(\mathbf{W}^{(L)} z^{(L-1)} +
+b^{(L)})) \\
+\hat{y}_{ui} &amp;= \alpha(\mathbf{h}^\top\phi^L(z^{(L-1)}))
+\end{aligned}\end{split}
+\]</span> 其中<span class="math inline">\(\mathbf{W}^*,
+\mathbf{b}^*\)</span>和<span
+class="math inline">\(\alpha^*\)</span>分别是第<span
+class="math inline">\(l\)</span>层的权重矩阵、偏置向量和激活函数。<span
+class="math inline">\(\phi^*\)</span>对应层的函数变换。<span
+class="math inline">\(\mathbf{z}^*\)</span>是第<span
+class="math inline">\(l\)</span>层的输出向量。</p>
+<p>可以看出，GMF和MLP的都能输出用户对物品的评分，一种方式是将两者相加作为最终的预测评分。但是为了更好地融合GMF和MLP，NeuMF模型将GMF和MLP倒数第二层的输出拼接并得到一个特征向量，然后通过一个权重向量<span
+class="math inline">\(\mathbf{h}\)</span>来对这个特征向量进行加权，最后通过一个<span
+class="math inline">\(\text{sigmoid}\)</span>激活函数来预测得分。最后的预测层定义如下：
+<span class="math display">\[
+\hat{y}_{ui} = \sigma(\mathbf{h}^\top[\mathbf{x}, \phi^L(z^{(L-1)})]).
+\]</span></p>
+<h2 id="模型实现">模型实现</h2>
+<p>由于GMF模型和MLP模型不共享嵌入层，因此我们一共需要四个嵌入层。MLP的结构由参数<code>nums_hiddens</code>控制，<code>nums_hiddens</code>是一个列表，其中的每个元素代表MLP每一层的隐藏单元数，激活函数使用<span
+class="math inline">\(\text{ReLU}\)</span>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">from</span> torch <span class="hljs-keyword">import</span> nn<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">NeuMF</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self,num_users,num_items,num_factors,num_hiddens,**kwarg</span>):<br>        <span class="hljs-built_in">super</span>(NeuMF,self).__init__(**kwarg)<br>        self.P = nn.Embedding(num_users,num_factors)<br>        self.Q = nn.Embedding(num_items,num_factors)<br>        self.U = nn.Embedding(num_users,num_factors)<br>        self.V = nn.Embedding(num_items,num_factors)<br>        self.mlp = nn.Sequential()<br>        <span class="hljs-comment"># in_out记录MLP每一层的输入和输出维度</span><br>        self.in_out = [(i,o) <span class="hljs-keyword">for</span> i,o <span class="hljs-keyword">in</span> <br>                       <span class="hljs-built_in">zip</span>([<span class="hljs-number">2</span>*num_factors]+num_hiddens[:-<span class="hljs-number">1</span>],num_hiddens)]<br>        <span class="hljs-keyword">for</span> i,(in_,out) <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(self.in_out):<br>            self.mlp.add_module(<span class="hljs-string">f&#x27;layer_<span class="hljs-subst">&#123;i&#125;</span>&#x27;</span>,nn.Linear(in_, out)) <br>            self.mlp.add_module(<span class="hljs-string">f&#x27;activation_<span class="hljs-subst">&#123;i&#125;</span>&#x27;</span>,nn.ReLU())<br>        <span class="hljs-comment"># num_factors是GMF的输出维度,num_hiddens[-1]是MLP的输出维度</span><br>        self.prediction_layer = nn.Linear(num_factors+num_hiddens[-<span class="hljs-number">1</span>],<span class="hljs-number">1</span>) <br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self,user_ids,item_ids</span>):<br>        p_mf = self.P(user_ids)<br>        q_mf = self.Q(item_ids)<br>        u_mlp = self.U(user_ids)<br>        v_mlp = self.V(item_ids)<br>        gmf = p_mf*q_mf<br>        mlp = self.mlp(torch.cat([u_mlp,v_mlp],dim=-<span class="hljs-number">1</span>))<br>        <span class="hljs-comment"># outputs.shape = (batch_size,1)</span><br>        outputs = self.prediction_layer(torch.cat([gmf,mlp],dim=-<span class="hljs-number">1</span>)) <br>        <span class="hljs-keyword">return</span> outputs.squeeze(dim = -<span class="hljs-number">1</span>) <br></code></pre></td></tr></table></figure>
+<h2 id="使用负采样定制数据集">使用负采样定制数据集</h2>
+<p>在前一章我们提到了用成对法构建个性化排名系统，需要对每个正样本随机采样一个负样本，负样本定义为用户没有交互过的物品，也就是未观测到的条目。以下函数接收<code>users</code>和<code>items</code>列表，每行对应用户-物品交互对，同时还接收一个字典<code>candidates</code>，其中键是用户，值是用户交互过的物品列表。可以通过<code>candidates</code>构造一个<code>neg_candidates</code>字典，其中键是用户，值是用户没有交互过的物品列表。<code>neg_candidates</code>字典可以用于负采样，为每一个用户-物品交互对随机采样一个负样本。</p>
+<p>在训练阶段，模型确保用户喜欢的项目的排名不高于他不喜欢或没有交互过的项目。
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> torch.utils.data <span class="hljs-keyword">import</span> TensorDataset,DataLoader<br><span class="hljs-keyword">import</span> random<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">generate_PRDatset</span>(<span class="hljs-params">users, items, candidates, num_items, device</span>):<br>    all_items = <span class="hljs-built_in">set</span>(<span class="hljs-built_in">range</span>(num_items))<br>    neg_candidates = &#123;u: <span class="hljs-built_in">list</span>(all_items - <span class="hljs-built_in">set</span>(cands)) <br>                            <span class="hljs-keyword">for</span> u,cands <span class="hljs-keyword">in</span> candidates.items()&#125;<br>    neg_items = []<br>    <span class="hljs-keyword">for</span> u <span class="hljs-keyword">in</span> users:<br>        <span class="hljs-comment"># 为每个用户随机采样一个负样本</span><br>        neg_sample = random.choice(neg_candidates[u])<br>        neg_items.append(neg_sample)<br>    users, items, neg_items = (torch.tensor(users).to(device), <br>                              torch.tensor(items).to(device), <br>                              torch.tensor(neg_items).to(device))<br>    <span class="hljs-keyword">return</span> TensorDataset(users, items, neg_items)<br></code></pre></td></tr></table></figure></p>
+<h2 id="评估器设计">评估器设计</h2>
+<p>本节我们将介绍两种用于评估个性化排名模型的评估器，分别是给定排名位置<span
+class="math inline">\(\ell\)</span>的命中率（<span
+class="math inline">\(\textrm{Hit}@\ell\)</span>）和ROC曲线下的面积（AUC）。<span
+class="math inline">\(\textrm{Hit}@\ell\)</span>用于衡量推荐系统是否成功地将用户感兴趣的项目推荐列表的前<span
+class="math inline">\(\ell\)</span>个位置，定义如下： <span
+class="math display">\[
+\textrm{Hit}@\ell = \frac{1}{m} \sum_{u \in \mathcal{U}}
+\textbf{1}(rank_{u, g_u} &lt;= \ell)
+\]</span> 其中<span
+class="math inline">\(\textbf{1}\)</span>是指示函数，<span
+class="math inline">\(rank_{u, g_u}\)</span>是用户<span
+class="math inline">\(u\)</span>的正样本<span
+class="math inline">\(g_u\)</span>在推荐列表中的排名，当<span
+class="math inline">\(rank_{u, g_u} \leq \ell\)</span>时，<span
+class="math inline">\(\textbf{1}(rank_{u, g_u} \leq \ell) =
+1\)</span>，否则<span class="math inline">\(\textbf{1}(rank_{u, g_u}
+\leq \ell) = 0\)</span>。<span
+class="math inline">\(m\)</span>是用户数，<span
+class="math inline">\(\mathcal{U}\)</span>是用户集合。</p>
+<p>AUC的定义如下： <span class="math display">\[
+\textrm{AUC} = \frac{1}{m} \sum_{u \in \mathcal{U}}
+\frac{1}{|\mathcal{I} \backslash S_u|} \sum_{j \in I \backslash S_u}
+\textbf{1}(rank_{u, g_u} &lt; rank_{u, j})
+\]</span> 其中<span
+class="math inline">\(\mathcal{I}\)</span>是物品集合，<span
+class="math inline">\(S_u\)</span>是用户<span
+class="math inline">\(u\)</span>的正样本集合。关于AUC的详细解读可以参考我的另一篇博客<a
+href="https://qinyu.space/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/%E8%AF%A6%E7%BB%86%E8%A7%A3%E8%AF%BBAUC%E5%8F%8A%E5%85%B6%E5%9C%A8%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/">《详细解读AUC及其在推荐系统中的应用》</a>，这里不再赘述。</p>
+<p>下面的函数用于计算每个用户的<span
+class="math inline">\(\textrm{Hit}@\ell\)</span>和AUC，其中<code>items</code>和<code>scores</code>分别是物品和对应的分数，<code>pos_items</code>是用户的正样本集合，<code>k</code>是<span
+class="math inline">\(\ell\)</span>的值。函数先根据模型预测分数对物品进行降序排序，并对正负样本进行标记，计算AUC时可以使用<code>sklearn.metrics.roc_auc_score</code>函数，其接收真实标签和预测分数，返回AUC值，我在<a
+href="https://qinyu.space/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/%E8%AF%A6%E7%BB%86%E8%A7%A3%E8%AF%BBAUC%E5%8F%8A%E5%85%B6%E5%9C%A8%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/">《详细解读AUC及其在推荐系统中的应用》</a>中介绍了另一种计算AUC的方法，读者有兴趣可以参考。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.metrics <span class="hljs-keyword">import</span> roc_auc_score<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">hit_and_auc</span>(<span class="hljs-params">scores, items, pos_items, k</span>):<br>    <span class="hljs-comment"># 根据分数对物品进行降序排序</span><br>    ranked_list = <span class="hljs-built_in">sorted</span>(<span class="hljs-built_in">zip</span>(items, scores), reverse=<span class="hljs-literal">True</span>, key=<span class="hljs-keyword">lambda</span> x: x[<span class="hljs-number">1</span>])<br>    ranked_items = [x[<span class="hljs-number">0</span>] <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> ranked_list]<br>    ranked_scores = [x[<span class="hljs-number">1</span>] <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> ranked_list]<br>    pos_items = <span class="hljs-built_in">set</span>(pos_items)<br>    <span class="hljs-comment"># 正样本标签为1，负样本标签为0</span><br>    labels = [<span class="hljs-number">1</span> <span class="hljs-keyword">if</span> i <span class="hljs-keyword">in</span> pos_items <span class="hljs-keyword">else</span> <span class="hljs-number">0</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> ranked_items]<br>    hit_rate = <span class="hljs-built_in">sum</span>(labels[:k]) / k<br>    auc = roc_auc_score(labels, ranked_scores)<br>    <span class="hljs-keyword">return</span> hit_rate, auc<br></code></pre></td></tr></table></figure>
+<p>接着使用下面的评估函数对每个用户单独计算<span
+class="math inline">\(\textrm{Hit}@\ell\)</span>和AUC，最后返回所有用户的平均值。其中<code>test_candidates</code>是一个字典形式的测试集数据，键是用户，值是用户交互过的物品列表。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">evaluate_ranking</span>(<span class="hljs-params">net, test_candidates, num_users, num_items, device</span>):<br>    hit_rate, auc_list = [], []<br>    net.<span class="hljs-built_in">eval</span>()<br>    <span class="hljs-keyword">for</span> u <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(num_users):<br>        user_ids = [u] * num_items<br>        item_ids = <span class="hljs-built_in">list</span>(<span class="hljs-built_in">range</span>(num_items))<br>        scores = []<br>        user_ids = torch.tensor(user_ids).to(device)<br>        items = torch.tensor(item_ids).to(device)<br>        test_data_iter = DataLoader(TensorDataset(user_ids, items), <br>                                    batch_size=<span class="hljs-number">256</span>, shuffle=<span class="hljs-literal">False</span>)                            <br>        <span class="hljs-comment"># scores是模型预测的用户u与所有物品的评分</span><br>        <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> test_data_iter:<br>            scores.extend(<span class="hljs-built_in">list</span>(net(*x).cpu().numpy()))<br>        hit,auc = hit_and_auc(scores, item_ids, test_candidates[u], <span class="hljs-number">20</span>)<br>        hit_rate.append(hit)<br>        auc_list.append(auc)<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">sum</span>(hit_rate) / <span class="hljs-built_in">len</span>(hit_rate), <span class="hljs-built_in">sum</span>(auc_list) / <span class="hljs-built_in">len</span>(auc_list) <br></code></pre></td></tr></table></figure>
+<h2 id="训练与评估模型">训练与评估模型</h2>
+<p>由于采用的是成对法构建个性化排名系统，因此需要将正负样本分别输入模型用于预测得分，并输入损失函数用于模型训练。函数定义如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> d2l <span class="hljs-keyword">import</span> torch <span class="hljs-keyword">as</span> d2l<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">train_ranking</span>(<span class="hljs-params">net,train_iter,test_candidates,loss,trainer,</span><br><span class="hljs-params">                  num_users,num_items,num_epochs,device,evaluator,eval_step=<span class="hljs-number">1</span></span>):<br>    hit_rate,auc = <span class="hljs-number">0</span>,<span class="hljs-number">0</span><br>    net.to(device)<br>    <span class="hljs-comment"># 定义动画用于可视化训练过程</span><br>    animator = d2l.Animator(xlabel=<span class="hljs-string">&#x27;epoch&#x27;</span>,xlim=[<span class="hljs-number">1</span>,num_epochs],ylim=[<span class="hljs-number">0</span>,<span class="hljs-number">1</span>],<br>                            legend=[<span class="hljs-string">&#x27;test hit rate&#x27;</span>,<span class="hljs-string">&#x27;test AUC&#x27;</span>])<br>    <span class="hljs-keyword">for</span> epoch <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(num_epochs):<br>        net.train()<br>        metric,l = d2l.Accumulator(<span class="hljs-number">2</span>),<span class="hljs-number">0.</span><br>        <span class="hljs-keyword">for</span> users, items, neg_items <span class="hljs-keyword">in</span> train_iter:<br>            <span class="hljs-comment"># 分别输入正负样本计算得分</span><br>            pos_scores = net(users,items)<br>            neg_scores = net(users,neg_items)<br>            <span class="hljs-comment">#梯度清零</span><br>            trainer.zero_grad()<br>            ls = loss(pos_scores,neg_scores)<br>            ls.backward()<br>            trainer.step()<br>            l += ls.item()<br>            metric.add(l,users.shape[<span class="hljs-number">0</span>])<br>        <span class="hljs-keyword">with</span> torch.no_grad():<br>            <span class="hljs-keyword">if</span> (epoch+<span class="hljs-number">1</span>)%eval_step==<span class="hljs-number">0</span>:<br>                hit_rate,auc = evaluator(<br>                    net,test_candidates,num_users,num_items,device)<br>                animator.add(epoch+<span class="hljs-number">1</span>,(hit_rate,auc))<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&#x27;train loss <span class="hljs-subst">&#123;metric[<span class="hljs-number">0</span>]/metric[<span class="hljs-number">1</span>]:<span class="hljs-number">.3</span>f&#125;</span>&#x27;</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&#x27;test hit rate <span class="hljs-subst">&#123;<span class="hljs-built_in">float</span>(hit_rate):<span class="hljs-number">.3</span>f&#125;</span>, test AUC <span class="hljs-subst">&#123;<span class="hljs-built_in">float</span>(auc):<span class="hljs-number">.3</span>f&#125;</span>&#x27;</span>)    <br></code></pre></td></tr></table></figure>
+<p>现在我们使用<a
+href="https://qinyu.space/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/%E6%BC%AB%E6%B8%B8%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%EF%BC%88%E4%B8%80%EF%BC%89%E2%80%94%E2%80%94%E6%A6%82%E8%BF%B0/">第一章</a>中的MovieLens数据接口加载数据集。由于MovieLens数据集中仅存在评分数据，这里对物品进行评级可以视为隐式反馈的一种形式，因此我们将这些评分二分为1和0，即如果用户对某个物品进行评分，则将隐式反馈视为1，否则视为0，这可以通过设置函数<code>load_data_ml100k</code>中<code>feedback="implicit"</code>实现。训练集和测试集按8:2的比例划分。
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python">batch_size = <span class="hljs-number">256</span><br>device = torch.device(<span class="hljs-string">&#x27;cuda&#x27;</span> <span class="hljs-keyword">if</span> torch.cuda.is_available() <span class="hljs-keyword">else</span> <span class="hljs-string">&#x27;cpu&#x27;</span>)<br>df,num_users,num_items = read_data_ml100k()<br><span class="hljs-comment"># 以&#x27;seq-aware&#x27;模式划分数据集</span><br>train_data,test_data = split_data_ml100k(df,test_ratio=<span class="hljs-number">0.2</span>)<br><br><span class="hljs-comment"># 以隐式反馈模式分别加载训练集和测试集</span><br>users_train,items_train,ratings_train,train_candidates = load_data_ml100k(train_data,<br>                                                num_users,num_items,feedback=<span class="hljs-string">&#x27;implicit&#x27;</span>)<br>users_test,items_test,ratings_test,test_candidates = load_data_ml100k(test_data,<br>                                                num_users,num_items,feedback=<span class="hljs-string">&#x27;implicit&#x27;</span>)<br><br>train_iter = DataLoader(generate_PRDatset(users_train,items_train,train_candidates,num_items,device),<br>                        batch_size,shuffle=<span class="hljs-literal">True</span>)    <br></code></pre></td></tr></table></figure></p>
+<p>随后创建并初始化模型，设置嵌入层维度为20，并使用三层MLP，每层隐藏单元数为[20,20,20]:
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">net = NeuMF(num_users, num_items, num_factors=<span class="hljs-number">20</span>, num_hiddens=[<span class="hljs-number">20</span>, <span class="hljs-number">20</span>, <span class="hljs-number">20</span>])<br><span class="hljs-keyword">for</span> param <span class="hljs-keyword">in</span> net.parameters():<br>    nn.init.normal_(param, mean=<span class="hljs-number">0</span>, std=<span class="hljs-number">0.01</span>)<br></code></pre></td></tr></table></figure></p>
+<p>训练阶段，使用前一章介绍的<code>BPRLoss</code>损失函数，学习率为0.01，权重衰减率为1e-5，迭代次数为10次，每次评估的间隔为1次：
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">lr, num_epochs, wd = <span class="hljs-number">0.01</span>, <span class="hljs-number">10</span>, <span class="hljs-number">1e-5</span><br>loss = BPRLoss()<br>trainer = torch.optim.Adam(net.parameters(),lr=lr,weight_decay=wd)<br>train_ranking(net,train_iter,test_candidates,loss,trainer,num_users,num_items,<br>                num_epochs,device,evaluate_ranking)<br></code></pre></td></tr></table></figure></p>
+<p>输出如下： <figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs subunit">train loss 0.134<br><span class="hljs-keyword">test </span>hit rate 0.081, test AUC 0.851<br></code></pre></td></tr></table></figure></p>
+<p><img src="https://pic.qinyu.space/image/20240819152930.png" srcset="/img/loading.gif" lazyload /></p>
+<p>这里<code>test hit rate</code>较低可能是因为测试数据集较小，使得模型预测的前<span
+class="math inline">\(\ell\)</span>个物品中正样本的数量较少，我们尝试将训练集和测试集的比例调整为1:1，重新训练模型，输出如下：
+<figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs subunit">train loss 0.042<br><span class="hljs-keyword">test </span>hit rate 0.190, test AUC 0.848<br></code></pre></td></tr></table></figure></p>
+<p><img src="https://pic.qinyu.space/image/20240819153903.png" srcset="/img/loading.gif" lazyload /></p>
+<h2 id="小结">小结</h2>
+<p>本节我们介绍了神经协同过滤模型NeuMF，该模型由GMF和MLP两部分组成，相较于传统的矩阵分解模型，NeuMF引入了非线性变换和复杂的交互关系，能够更好地捕捉用户和物品之间的关系。我们还介绍了如何使用负采样定制数据集，以及两种用于评估个性化排名模型的方法，分别是<span
+class="math inline">\(\textrm{Hit}@\ell\)</span>和AUC。最后我们训练了一个NeuMF模型，并在MovieLens数据集上进行了评估。</p>
+<p>下一章我们将介绍基于序列感知的个性化推荐模型，该模型能够考略用户的历史行为序列，更好地捕捉用户的兴趣演化过程。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <!-- 添加打赏模块 -->
+            <div class="reward-container">
+              
+                <button id="rewardBtn" class="reward-btn">
+                  
+                    Buy me a coffee ⛾
+                    
+                </button>
+                
+                <div id="rewardImgContainer" class="reward-img-container">
+                  <div class="singleImgContainer">
+                    <img id="wechatImg" class="reward-img" src="/img/wechatpay.jpg" srcset="/img/loading.gif" lazyload alt="微信二维码">
+                    <p class="wechatPay">微信支付</p>
+                  </div>
+                  <div class="singleImgContainer">
+                    <img id="alipayImg" class="reward-img" src="/img/alipay.jpg" srcset="/img/loading.gif" lazyload alt="支付宝二维码">
+                    <p class="aliPay">支付宝支付</p>
+                  </div>
+                </div>
+                
+            </div>
+
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/" class="category-chain-item">推荐系统</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/" class="print-no-link">#推荐系统</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>漫游推荐系统（五）——用于个性化排名的神经矩阵分解</div>
+      <div>https://qinyu.space/推荐系统/漫游推荐系统（五）——用于个性化排名的神经矩阵分解/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>QinYU</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年8月19日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/%E6%BC%AB%E6%B8%B8%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%EF%BC%88%E5%9B%9B%EF%BC%89%E2%80%94%E2%80%94%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E7%9A%84%E4%B8%AA%E6%80%A7%E5%8C%96%E6%8E%92%E5%90%8D/" title="漫游推荐系统（四）—— 推荐系统的个性化排名">
+                        <span class="hidden-mobile">漫游推荐系统（四）—— 推荐系统的个性化排名</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://cdn.staticfile.org/waline/2.15.5/waline.min.css')
+      Fluid.utils.createScript('https://cdn.staticfile.org/waline/2.15.5/waline.min.js', function() {
+        var options = Object.assign(
+          {"serverURL":"comment.qinyu.space","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+  <span style="color: #ddd;">Copyright© 2023-2024 QinYU</span>
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="/js/DynamicLine.js"></script>
+<script src="/js/reward.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
