@@ -26,7 +26,7 @@
 <meta property="og:image" content="https://pic.qinyu.space/image/20240904135423.png">
 <meta property="og:image" content="https://pic.qinyu.space/image/20240904141912.png">
 <meta property="article:published_time" content="2024-09-05T07:32:17.000Z">
-<meta property="article:modified_time" content="2024-09-05T08:41:19.539Z">
+<meta property="article:modified_time" content="2024-09-05T10:41:33.197Z">
 <meta property="article:author" content="QinYU">
 <meta property="article:tag" content="Linear attention">
 <meta property="article:tag" content="Transformers">
@@ -421,7 +421,7 @@
               <p id="updated-time" class="note note-info" style="">
                 
                   
-                    本文最后更新于 2024年9月5日 下午
+                    本文最后更新于 2024年9月5日 晚上
                   
                 
               </p>
@@ -581,12 +581,12 @@ Attention(\boldsymbol{Q},\boldsymbol{K},\boldsymbol{V})_i =
 e^{\boldsymbol{q}_i^{\top}\boldsymbol{k}_j}\boldsymbol{v}_j}{\sum\limits_{j=1}^n
 e^{\boldsymbol{q}_i^{\top}\boldsymbol{k}_j}}
 \]</span> 所以Scaled-Dot Attention是以<span
-class="math inline">\(e^{\boldsymbol{q}_{i}\top\boldsymbol{k}_{j}}\)</span>为权重对<span
+class="math inline">\(e^{\boldsymbol{q}_{i}^{\top}\boldsymbol{k}_{j}}\)</span>为权重对<span
 class="math inline">\(\boldsymbol{v}_i\)</span>进行加权平均，而正是由于这个指数项，使得无法先计算<span
 class="math inline">\(k_j\)</span>和<span
 class="math inline">\(v_j\)</span>。目前有一种使用kernel
 trick的方法，可以将<span
-class="math inline">\(e^{\boldsymbol{q}_{i\top}\boldsymbol{k}_{j}}\)</span>的计算用<span
+class="math inline">\(e^{\boldsymbol{q}_{i}^{\top}\boldsymbol{k}_{j}}\)</span>的计算用<span
 class="math inline">\(\phi(\boldsymbol{q}_i)^\top\varphi(\boldsymbol{k}_j)\)</span>替换，其中<span
 class="math inline">\(\phi(\cdot)\)</span>和<span
 class="math inline">\(\varphi(\cdot)\)</span>是值域非负的激活函数。对于自回归生成模型需要Mask未来信息，因此将求和<span
