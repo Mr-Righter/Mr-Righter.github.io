@@ -1,0 +1,1131 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=light>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/logo.png">
+  <link rel="icon" href="/img/logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="QinYU">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="论文解读：Leave No Context Behind: Efficient Infinite Context Transformers with Infini-attention Google在今年4月份发布了一篇论文《Leave No Context Behind: Efficient Infinite Context Transformers with Infini-attent">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文解读：Leave No Context Behind Efficient Infinite Context Transformers with Infini-attention">
+<meta property="og:url" content="https://qinyu.space/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB%EF%BC%9ALeave%20No%20Context%20Behind%20Efficient%20Infinite%20Context%20Transformers%20with%20Infini-attention/index.html">
+<meta property="og:site_name" content="QinYU">
+<meta property="og:description" content="论文解读：Leave No Context Behind: Efficient Infinite Context Transformers with Infini-attention Google在今年4月份发布了一篇论文《Leave No Context Behind: Efficient Infinite Context Transformers with Infini-attent">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic.qinyu.space/image/20240904135423.png">
+<meta property="og:image" content="https://pic.qinyu.space/image/20240904141912.png">
+<meta property="article:published_time" content="2024-09-05T07:32:17.000Z">
+<meta property="article:modified_time" content="2024-09-05T08:13:52.605Z">
+<meta property="article:author" content="QinYU">
+<meta property="article:tag" content="Linear attention">
+<meta property="article:tag" content="Transformers">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pic.qinyu.space/image/20240904135423.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>论文解读：Leave No Context Behind Efficient Infinite Context Transformers with Infini-attention - QinYU</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/reward.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"qinyu.space","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"❡"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":"G-1XHKDCG0YK"},"tencent":{"sid":null,"cid":null},"woyaola":21827805,"cnzz":null,"leancloud":{"app_id":"Mgc2jj2uZmdKVODXfj5LT8mt-MdYXbMMI","app_key":"3xZpYKXriWZv1kkJx3xvzmZV","server_url":"https://mgc2jj2u.api.lncldglobal.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=G-1XHKDCG0YK", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', 'G-1XHKDCG0YK');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+    <!-- 51.la Analytics -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript('//js.users.51.la/21827805.js');
+      }
+    </script>
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  <div>
+    <div class='real_mask' style="
+		background-color: rgba(0,0,0,0);
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		z-index: -777;
+	"></div>
+    <div id="banner_video_insert">
+    </div>
+    <div id='banner_img'>
+    </div>
+</div>
+<div id="banner"></div>
+
+  <header>
+    
+
+<div class="header-inner" style="height: 100vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>QinYU的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/site-map/" target="_self">
+                <i class="iconfont icon-ic_fly"></i>
+                <span>导航</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/null') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="论文解读：Leave No Context Behind Efficient Infinite Context Transformers with Infini-attention"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        QinYU
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-09-05 15:32" pubdate>
+          2024年9月5日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          20 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+        <div class="scroll-down-bar">
+          <i class="iconfont icon-arrowdown"></i>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+    
+    <script type="text/javascript" src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/2.1.3/jquery.min.js"></script>
+    <div class="banner" id='banner'>
+
+        <div class="full-bg-img">
+
+            
+                <script>
+                    var ua = navigator.userAgent;
+                    var ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
+                        isIphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
+                        isAndroid = ua.match(/(Android)\s+([\d.]+)/),
+                        isMobile = isIphone || isAndroid;
+
+
+                    $.getJSON('/js/video_url.json', function (data)
+                    {
+                        if (true)
+                        {
+                            var video_list_length = data.length
+                            var seed = Math.random()
+                            index = Math.floor(seed * video_list_length)
+
+                            video_url = data[index][0]
+                            pre_show_image_url = data[index][1]
+
+                            banner_obj = document.getElementById("banner")
+                            banner_obj.style.cssText = "background: url('" + pre_show_image_url + "') no-repeat;"
+
+                            vvd_banner_obj = document.getElementById("banner_img")
+                            vvd_banner_content = "<img id='banner_img_item' src='" + pre_show_image_url + "'style='position: fixed; object-fit: cover; width: 100vw; height: 100vh; z-index: -999'>"
+                            vvd_banner_obj.innerHTML = vvd_banner_content
+                            
+                            if (!isMobile)
+                            {
+                                video_html_res = "<video id='video_item' style='position: fixed; object-fit: cover; width: 100vw; height: 100vh; z-index: -888;'  muted='muted' src=" + video_url + " autoplay='autoplay' loop='loop'></video>"
+                                document.getElementById("banner_video_insert").innerHTML = video_html_res;
+                            }
+                        }
+                    });
+
+                </script>
+                
+        </div>
+    </div>
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header" style = "color:#ddd">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">论文解读：Leave No Context Behind Efficient Infinite Context Transformers with Infini-attention</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2024年9月5日 下午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1
+id="论文解读leave-no-context-behind-efficient-infinite-context-transformers-with-infini-attention">论文解读：Leave
+No Context Behind: Efficient Infinite Context Transformers with
+Infini-attention</h1>
+<p>Google在今年4月份发布了一篇论文<a
+target="_blank" rel="noopener" href="https://arxiv.org/abs/2404.07143">《Leave No Context Behind:
+Efficient Infinite Context Transformers with
+Infini-attention》</a>，光看这篇论文标题就很吸引人，既是“No Context
+Behind”又是“Infini-attention”，那让我们看看Infini —
+Transformers是否能够真的做到无限上下文的处理。</p>
+<span id="more"></span>
+<h2 id="background">1. Background</h2>
+<ol type="1">
+<li>传统注意力机制 Infini —
+Transformers和大部分魔改注意力机制模型的目的一样，都是为了解决长文本处理的问题。传统Transformers的注意力机制在内存占用和计算时间上都呈现平方复杂度，因此在处理超长文本时会遇到困难。</li>
+<li>记忆压缩
+为了处理超长文本，以往的一些记忆压缩方法通过将序列信息压缩到一个固定大小的隐状态中，其代表就是RNN模型。这种方法有着较高的计算效率，但是很难将整个上下文信息存储到单个固定大小的向量中。因此需要找到一种能够平衡简单性与压缩性能的方法。</li>
+<li>Transformer-XL
+Transformer-XL针对长文本进行了优化，以固定长度的序列片段作为输入，并会将上一阶段缓存的状态用于当前阶段的注意力计算，如下图：</li>
+</ol>
+<p><img
+src="https://pic.qinyu.space/image/1_jexoY3lE_RxRhOlGruoL4Q.gif" srcset="/img/loading.gif" lazyload /></p>
+<p>通过序列分段和缓存状态，Transformer-XL可以处理更长的文本，Infinit-attention也是使用了这种思想，但是在状态缓存策略上有所不同。</p>
+<h2 id="infini-attention">2. Infini-attention</h2>
+<h3 id="infini-attention-local-attention-rnn">2.1 Infini-attention =
+Local Attention + RNN</h3>
+<p>如下图所示，为了能有效处理长序列，Infini-Transformer采取了与Transformer-XL相似的策略，将长序列分割为固定长度的片段，并计算每个片段的Causal
+scaled dot-product
+attention，但是这种注意力仅局限在当前的片段中，并不能利用全局的上下文信息。为此，Infini-Transformer引入了一个Compressive
+memory模块，用于存储全局的上下文信息。在计算当前片段的注意力输出时，会将全局的上下文信息与当前片段的局部信息进行融合，然后更新全局的上下文信息。这种机制非常类似于RNN模型，因此Infini-attention可以看作是Local
+Attention和RNN的结合。</p>
+<p><img src="https://pic.qinyu.space/image/20240904135423.png" srcset="/img/loading.gif" lazyload /></p>
+<p>Infini-attention的整体框架如下图所示，<span
+class="math inline">\(\{KV\}_{s-1}\)</span>和<span
+class="math inline">\(\{KV\}_{s}\)</span>分别表示上一片段和当前片段的key和value，<span
+class="math inline">\(Q_s\)</span>表示当前阶片段的query，PE表示位置编码，图中Causal
+scaled dot-product
+attention就是普通的Transformer的注意力计算，而对于Compressive
+memory的处理包括Retrieve和Update两个步骤： -
+Retrieve是利用当前的query去检索压缩记忆中的有效信息，并将其融合到Local
+Attention的输出中，这样得到的最终输出理论上包含了全局上下文信息。 -
+Update是将当前片段的<span
+class="math inline">\(KV\)</span>信息更新到压缩记忆中，以便下一阶段的注意力计算。Updata是在Retrieve之后进行的。</p>
+<p><img src="https://pic.qinyu.space/image/20240904141912.png" srcset="/img/loading.gif" lazyload /></p>
+<p>与RNN相似，Infini-attention维护一个循环的记忆状态以有效地跟踪全局上下文信息，我们可以用以下函数表示：
+<span class="math display">\[
+O_s,M_s=\text{infini-attention}(X_s,M_{s-1})
+\]</span></p>
+<h3 id="scaled-dot-product-attention">2.2 Scaled Dot-product
+Attention</h3>
+<p>对于多头注意力的每个头，先以片段序列<span class="math inline">\(X \in
+\mathbb{R}^{L \times d_{model}}\)</span>为输入，计算query、key和value：
+<span class="math display">\[
+Q=XW_Q,K=XW_K,V=XW_V
+\]</span> 其中<span class="math inline">\(W_Q \in \mathbb{R}^{d_{model}
+\times d_k},W_K \in \mathbb{R}^{d_{model} \times d_k},W_V \in
+\mathbb{R}^{d_{model} \times d_v}\)</span>是可训练的投影矩阵，<span
+class="math inline">\(d_k,d_k,d_v\)</span>分别是query、key和value的维度。然后计算注意力输出：
+<span class="math display">\[
+A_{dot}=\mathrm{softmax}\left(\frac{QK^{T}}{\sqrt{d_{k}}}\right)V.
+\]</span></p>
+<h3 id="compressive-memory">2.3 Compressive Memory</h3>
+<p>Compressive
+Memory是Infini-attention的核心模块，用于存储全局的上下文信息。其运行机制包括<strong>Memory
+Retrieve</strong>、<strong>Long-term context
+injection</strong>和<strong>Memory Update</strong>三个步骤。 #### 2.3.1
+Memory Retrieve
+为了检索压缩记忆中的有效信息，Infini-attention使用当前片段的query <span
+class="math inline">\(Q \in \mathbb{R}^{N \times
+d_{key}}\)</span>去检索记忆<span
+class="math inline">\(M_{s-1}\in\mathbb{R}^{d_{key}\times
+d_{value}}\)</span>，得到检索结果<span
+class="math inline">\(A_{mem}\in\mathbb{R}^{N \times
+d_{value}}\)</span>： <span class="math display">\[
+A_{mem}=\frac{\sigma(Q)M_{s-1}}{\sigma(Q)z_{s-1}}.
+\]</span> 其中<span
+class="math inline">\(\sigma\)</span>是激活函数，原文中使用的是<span
+class="math inline">\(\text{ELU}+1\)</span>，<span
+class="math inline">\(z_{s-1}\)</span>是归一化因子，非线性和归一化因子的引入是为了是训练更为稳定。</p>
+<h4 id="long-term-context-injection">2.3.2 Long-term context
+injection</h4>
+<p>为了使最后的输出包含全局上下文信息，Infini-attention将Memory
+Retrieve的结果<span class="math inline">\(A_{mem}\)</span>与Local
+Attention的输出<span
+class="math inline">\(A_{dot}\)</span>通过可学习的门控标量<span
+class="math inline">\(\beta\)</span>进行融合： <span
+class="math display">\[
+A=\text{sigmoid}(\beta)\odot A_{mem}+(1-\text{sigmoid}(\beta))\odot
+A_{dot}.
+\]</span>
+门控机制的引入可以使模型能更好权衡长期记忆和局部信息。对于多头的Infini-attention，可以并行计算<span
+class="math inline">\(H\)</span>个头的注意力输出并将其拼接在一起，通过一个可训练的投影矩阵<span
+class="math inline">\(W^O \in \mathbb{R}^{H \times d_{value} \times
+d_{model}}\)</span>得到最终的输出<span class="math inline">\(O \in
+\mathbb{R}^{N \times d_{model}}\)</span>： <span class="math display">\[
+O=\text{concat}(A^1,\cdots,A^H)W^O.
+\]</span></p>
+<h4 id="memory-update">2.3.3 Memory Update</h4>
+<p>retrieve完成之后，就可以用当前片段的<span
+class="math inline">\(KV\)</span>信息更新压缩记忆和归一化因子： <span
+class="math display">\[
+M_s\leftarrow M_{s-1}+\sigma(K)^TV\mathrm{~and~}z_s\leftarrow
+z_{s-1}+\sum_{t=1}^N\sigma(K_t).
+\]</span> 新的记忆状态<span
+class="math inline">\(M_s\)</span>和归一化因子<span
+class="math inline">\(z_s\)</span>将用于下一片段的Retrieve，这样就实现了全局上下文信息的传递。</p>
+<p>上述<span class="math inline">\(M_s\)</span>的更新方式称之为Linear
+Update，受delta
+rule的启发，作者还提出了一种以增量规则为基础的更新方式，称之为Linear+Delta：
+<span class="math display">\[
+M_s\leftarrow
+M_{s-1}+\sigma(K)^T(V-\frac{\sigma(K)M_{s-1}}{\sigma(K)z_{s-1}}).
+\]</span> 与Linear Update相比，Delta方式会先从<span
+class="math inline">\(V\)</span>中减去<span
+class="math inline">\(\frac{\sigma(K)M_{s-1}}{\sigma(K)z_{s-1}}\)</span>，被减去的这项可以看成是用<span
+class="math inline">\(K\)</span>去检索<span
+class="math inline">\(M_{s-1}\)</span>并得到压缩记忆中的存储的<span
+class="math inline">\(V_{mem}\)</span>，那么更新记忆时已有的<span
+class="math inline">\(V_{mem}\)</span>就会被减去，通过增量更新的方式可以减少记忆中的冗余信息。</p>
+<h2 id="linear-auto-regressive-attention">3. Linear Auto-regressive
+Attention</h2>
+<p>Infini-attention中Compressive Memory本质上是一种Linear
+Auto-regressive Attention，文中使用了一些kenel
+trick的方法来代替全局<span
+class="math inline">\(\text{softmax}\)</span>的计算，但这并不是一个新概念，围绕的Linear
+attention的研究已经有很多。下面来论证为什么Infini-attention是Linear
+Auto-regressive Attention。</p>
+<p>对于Scaled-Dot Attention，其形式为： <span class="math display">\[
+Attention(Q,K,V)=\text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V.
+\]</span> <span class="math inline">\(QK^{\top}\)</span>得到一个<span
+class="math inline">\(N \times
+N\)</span>的矩阵，这一步决定了Attention的复杂度为<span
+class="math inline">\(O(N^2)\)</span>，如果没有<span
+class="math inline">\(\text{softmax}\)</span>一步，那么可以先计算<span
+class="math inline">\(K^TV\)</span>得到一个<span class="math inline">\(d
+\times d\)</span>的矩阵，然后再用<span
+class="math inline">\(Q\)</span>左乘它，这样的计算复杂度为<span
+class="math inline">\(O(Nd^2)\)</span>，由于<span
+class="math inline">\(d \ll N\)</span>，因此Linear
+Attention的复杂度大致为<span
+class="math inline">\(O(N)\)</span>。所以Linear
+Attention主要探究的是如何摘掉<span
+class="math inline">\(\text{softmax}\)</span>这一步。</p>
+<p>我们先将Scaled-Dot Attention等价改写为： <span
+class="math display">\[
+Attention(\boldsymbol{Q},\boldsymbol{K},\boldsymbol{V})_i =
+\frac{\sum\limits_{j=1}^n
+e^{\boldsymbol{q}_i^{\top}\boldsymbol{k}_j}\boldsymbol{v}_j}{\sum\limits_{j=1}^n
+e^{\boldsymbol{q}_i^{\top}\boldsymbol{k}_j}}
+\]</span> 所以Scaled-Dot Attention是以<span
+class="math inline">\(e^{\boldsymbol{q}_{i}\top\boldsymbol{k}_{j}}\)</span>为权重对<span
+class="math inline">\(\boldsymbol{v}_i\)</span>进行加权平均，而正是由于这个指数项，使得无法先计算<span
+class="math inline">\(k_j\)</span>和<span
+class="math inline">\(v_j\)</span>。目前有一种使用kernel
+trick的方法，可以将<span
+class="math inline">\(e^{\boldsymbol{q}_{i\top}\boldsymbol{k}_{j}}\)</span>的计算用<span
+class="math inline">\(\phi(\boldsymbol{q}_i)^\top\varphi(\boldsymbol{k}_j)\)</span>替换，其中<span
+class="math inline">\(\phi(\cdot)\)</span>和<span
+class="math inline">\(\varphi(\cdot)\)</span>是值域非负的激活函数。对于自回归生成模型需要Mask未来信息，因此将求和<span
+class="math inline">\(\sum\limits_{j=1}^n\)</span>改为<span
+class="math inline">\(\sum\limits_{j=1}^i\)</span>，Attention的计算可以改写为：
+<span class="math display">\[
+Attention(\boldsymbol{Q},\boldsymbol{K},\boldsymbol{V})_i =
+\frac{\sum\limits_{j=1}^i \left(\phi(\boldsymbol{q}_i)^{\top}
+\varphi(\boldsymbol{k}_j)\right)\boldsymbol{v}_j}{\sum\limits_{j=1}^i
+\phi(\boldsymbol{q}_i)^{\top} \varphi(\boldsymbol{k}_j)}=\frac{
+\phi(\boldsymbol{q}_i)^{\top}
+\sum\limits_{j=1}^i\varphi(\boldsymbol{k}_j)\boldsymbol{v}_j^{\top}}{
+\phi(\boldsymbol{q}_i)^{\top}
+\sum\limits_{j=1}^i\varphi(\boldsymbol{k}_j)}
+\]</span> 上述Attention可以作为一个RNN模型以递归的方式实现，设<span
+class="math inline">\(\boldsymbol{S}_i=\sum\limits_{j=1}^i\varphi(\boldsymbol{k}_j)\boldsymbol{v}_j^{\top}\)</span>，<span
+class="math inline">\(\boldsymbol{z}_i=\sum\limits_{j=1}^i\varphi(\boldsymbol{k}_j)\)</span>，则有：
+<span class="math display">\[
+Attention(\boldsymbol{Q},\boldsymbol{K},\boldsymbol{V})_i =\frac{
+\phi(\boldsymbol{q}_i)^{\top} \boldsymbol{S}_i}{
+\phi(\boldsymbol{q}_i)^{\top} \boldsymbol{z}_i},\quad
+\begin{aligned}&amp;\boldsymbol{S}_i=\boldsymbol{S}_{i-1}+\varphi(\boldsymbol{k}_i)\boldsymbol{v}_i^{\top}\\
+&amp;\boldsymbol{z}_i=\boldsymbol{z}_{i-1}+\varphi(\boldsymbol{k}_i)
+\end{aligned}
+\]</span> 到此可以看出Inifi-attention的Compressive
+Memory模块就是一个Linear Auto-regressive
+Attention，只不过Inifi-attention中Memory的Retrieve和Update是以Segment为单位进行的，而Linear
+Auto-regressive
+Attention是以Token为单位进行的；另一点就是Inifi-attention是先Retrieve再Update，与Linear
+Auto-regressive Attention相反。</p>
+<h2 id="is-this-gold-solution">4. Is this gold solution?</h2>
+<p>抛开创新性，Infini-attention使用RNN的架构来记忆全局上下文信息，理论上可以处理无限长的文本，但是这种记忆是不可学习的，模型无法知道哪些高质量信息需要保留在压缩记忆中。jlamprou提出了一些可学习的压缩记忆方案，例如Differentiable
+Neural Computer
+(DNC)，将可训练的神经网络控制器和可读写的外部存储器进行结合从而控制信息的流动。另一点就是模型无法并行训练，每一个片段的计算都依赖于上一个片段的计算，这样会导致训练效率低下。</p>
+<p>总之，Infini-Transformer是一个很有趣的模型，通过Local Attention +
+RNN能够处理无限长的文本，但是由于RNN固有的缺点，Infini-Transformer并没有很好地解决Background提出的记忆压缩问题，因此在记忆压缩中引入可控或可学习的机制将会是有趣的研究方向。</p>
+<section class="footnotes">
+<div class="footnote-list">
+<ol>
+<li>
+<span id="fn:1" class="footnote-text"><span><a
+target="_blank" rel="noopener" href="https://github.com/jlamprou/Infini-Attention">https://github.com/jlamprou/Infini-Attention</a>
+<a href="#fnref:1" rev="footnote" class="footnote-backref">
+↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:2"
+class="footnote-text"><span><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=r_UBBfTPcF0">YouTube:
+Leave No Context Behind: Efficient Infinite Context Transformers with
+Infini-attention</a>
+<a href="#fnref:2" rev="footnote" class="footnote-backref">
+↩︎</a></span></span>
+</li>
+</ol>
+</div>
+</section>
+
+                
+              </div>
+            
+            <hr/>
+            <!-- 添加打赏模块 -->
+            <div class="reward-container">
+              
+                <button id="rewardBtn" class="reward-btn">
+                  
+                    Buy me a coffee ⛾
+                    
+                </button>
+                
+                <div id="rewardImgContainer" class="reward-img-container">
+                  <div class="singleImgContainer">
+                    <img id="wechatImg" class="reward-img" src="/img/wechatpay.jpg" srcset="/img/loading.gif" lazyload alt="微信二维码">
+                    <p class="wechatPay">微信支付</p>
+                  </div>
+                  <div class="singleImgContainer">
+                    <img id="alipayImg" class="reward-img" src="/img/alipay.jpg" srcset="/img/loading.gif" lazyload alt="支付宝二维码">
+                    <p class="aliPay">支付宝支付</p>
+                  </div>
+                </div>
+                
+            </div>
+
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" class="category-chain-item">论文解读</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Linear-attention/" class="print-no-link">#Linear attention</a>
+      
+        <a href="/tags/Transformers/" class="print-no-link">#Transformers</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>论文解读：Leave No Context Behind Efficient Infinite Context Transformers with Infini-attention</div>
+      <div>https://qinyu.space/论文解读/论文解读：Leave No Context Behind Efficient Infinite Context Transformers with Infini-attention/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>QinYU</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年9月5日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/%E6%BC%AB%E6%B8%B8%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E7%94%A8%E4%BA%8E%E4%B8%AA%E6%80%A7%E5%8C%96%E6%8E%92%E5%90%8D%E7%9A%84%E7%A5%9E%E7%BB%8F%E7%9F%A9%E9%98%B5%E5%88%86%E8%A7%A3/" title="漫游推荐系统（五）—— 用于个性化排名的神经矩阵分解">
+                        <span class="hidden-mobile">漫游推荐系统（五）—— 用于个性化排名的神经矩阵分解</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://cdn.staticfile.org/waline/2.15.5/waline.min.css')
+      Fluid.utils.createScript('https://cdn.staticfile.org/waline/2.15.5/waline.min.js', function() {
+        var options = Object.assign(
+          {"serverURL":"comment.qinyu.space","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+  <span style="color: #ddd;">Copyright© 2023-2024 QinYU</span>
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="/js/DynamicLine.js"></script>
+<script src="/js/reward.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
