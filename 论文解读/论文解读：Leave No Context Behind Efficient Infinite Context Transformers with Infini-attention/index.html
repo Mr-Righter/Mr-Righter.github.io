@@ -26,7 +26,7 @@
 <meta property="og:image" content="https://pic.qinyu.space/image/20240904135423.png">
 <meta property="og:image" content="https://pic.qinyu.space/image/20240904141912.png">
 <meta property="article:published_time" content="2024-09-05T07:32:17.000Z">
-<meta property="article:modified_time" content="2024-09-05T08:27:25.732Z">
+<meta property="article:modified_time" content="2024-09-05T08:30:53.363Z">
 <meta property="article:author" content="QinYU">
 <meta property="article:tag" content="Linear attention">
 <meta property="article:tag" content="Transformers">
@@ -447,7 +447,7 @@ Transformers和大部分魔改注意力机制模型的目的一样，都是为�
 </ol>
 <p>为了处理超长文本，以往的一些记忆压缩方法通过将序列信息压缩到一个固定大小的隐状态中，其代表就是RNN模型。这种方法有着较高的计算效率，但是很难将整个上下文信息存储到单个固定大小的向量中。因此需要找到一种能够平衡简单性与压缩性能的方法。</p>
 <ol start="3" type="1">
-<li>Transformer-XL</li>
+<li><strong>Transformer-XL</strong></li>
 </ol>
 <p>Transformer-XL针对长文本进行了优化，以固定长度的序列片段作为输入，并会将上一阶段缓存的状态用于当前阶段的注意力计算，如下图：</p>
 <p><img
@@ -468,11 +468,13 @@ class="math inline">\(\{KV\}_{s}\)</span>分别表示上一片段和当前片段
 class="math inline">\(Q_s\)</span>表示当前阶片段的query，PE表示位置编码，图中Causal
 scaled dot-product
 attention就是普通的Transformer的注意力计算，而对于Compressive
-memory的处理包括Retrieve和Update两个步骤： -
-Retrieve是利用当前的query去检索压缩记忆中的有效信息，并将其融合到Local
-Attention的输出中，这样得到的最终输出理论上包含了全局上下文信息。 -
-Update是将当前片段的<span
-class="math inline">\(KV\)</span>信息更新到压缩记忆中，以便下一阶段的注意力计算。Updata是在Retrieve之后进行的。</p>
+memory的处理包括Retrieve和Update两个步骤：</p>
+<ul>
+<li>Retrieve是利用当前的query去检索压缩记忆中的有效信息，并将其融合到Local
+Attention的输出中，这样得到的最终输出理论上包含了全局上下文信息。</li>
+<li>Update是将当前片段的<span
+class="math inline">\(KV\)</span>信息更新到压缩记忆中，以便下一阶段的注意力计算。Updata是在Retrieve之后进行的。</li>
+</ul>
 <p><img src="https://pic.qinyu.space/image/20240904141912.png" srcset="/img/loading.gif" lazyload /></p>
 <p>与RNN相似，Infini-attention维护一个循环的记忆状态以有效地跟踪全局上下文信息，我们可以用以下函数表示：
 <span class="math display">\[
