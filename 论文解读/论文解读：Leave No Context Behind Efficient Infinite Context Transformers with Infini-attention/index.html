@@ -26,7 +26,7 @@
 <meta property="og:image" content="https://pic.qinyu.space/image/20240904135423.png">
 <meta property="og:image" content="https://pic.qinyu.space/image/20240904141912.png">
 <meta property="article:published_time" content="2024-09-05T07:32:17.000Z">
-<meta property="article:modified_time" content="2024-09-05T08:25:24.160Z">
+<meta property="article:modified_time" content="2024-09-05T08:27:25.732Z">
 <meta property="article:author" content="QinYU">
 <meta property="article:tag" content="Linear attention">
 <meta property="article:tag" content="Transformers">
@@ -438,13 +438,18 @@ Transformers是否能够真的做到无限上下文的处理。</p>
 <span id="more"></span>
 <h2 id="background">1. Background</h2>
 <ol type="1">
-<li>传统注意力机制 Infini —
-Transformers和大部分魔改注意力机制模型的目的一样，都是为了解决长文本处理的问题。传统Transformers的注意力机制在内存占用和计算时间上都呈现平方复杂度，因此在处理超长文本时会遇到困难。</li>
-<li>记忆压缩
-为了处理超长文本，以往的一些记忆压缩方法通过将序列信息压缩到一个固定大小的隐状态中，其代表就是RNN模型。这种方法有着较高的计算效率，但是很难将整个上下文信息存储到单个固定大小的向量中。因此需要找到一种能够平衡简单性与压缩性能的方法。</li>
-<li>Transformer-XL
-Transformer-XL针对长文本进行了优化，以固定长度的序列片段作为输入，并会将上一阶段缓存的状态用于当前阶段的注意力计算，如下图：</li>
+<li><strong>传统注意力机制</strong></li>
 </ol>
+<p>Infini —
+Transformers和大部分魔改注意力机制模型的目的一样，都是为了解决长文本处理的问题。传统Transformers的注意力机制在内存占用和计算时间上都呈现平方复杂度，因此在处理超长文本时会遇到困难。</p>
+<ol start="2" type="1">
+<li><strong>记忆压缩</strong></li>
+</ol>
+<p>为了处理超长文本，以往的一些记忆压缩方法通过将序列信息压缩到一个固定大小的隐状态中，其代表就是RNN模型。这种方法有着较高的计算效率，但是很难将整个上下文信息存储到单个固定大小的向量中。因此需要找到一种能够平衡简单性与压缩性能的方法。</p>
+<ol start="3" type="1">
+<li>Transformer-XL</li>
+</ol>
+<p>Transformer-XL针对长文本进行了优化，以固定长度的序列片段作为输入，并会将上一阶段缓存的状态用于当前阶段的注意力计算，如下图：</p>
 <p><img
 src="https://pic.qinyu.space/image/1_jexoY3lE_RxRhOlGruoL4Q.gif" srcset="/img/loading.gif" lazyload /></p>
 <p>通过序列分段和缓存状态，Transformer-XL可以处理更长的文本，Infinit-attention也是使用了这种思想，但是在状态缓存策略上有所不同。</p>
