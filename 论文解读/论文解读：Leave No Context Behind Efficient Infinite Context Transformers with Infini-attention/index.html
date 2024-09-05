@@ -26,7 +26,7 @@
 <meta property="og:image" content="https://pic.qinyu.space/image/20240904135423.png">
 <meta property="og:image" content="https://pic.qinyu.space/image/20240904141912.png">
 <meta property="article:published_time" content="2024-09-05T07:32:17.000Z">
-<meta property="article:modified_time" content="2024-09-05T08:23:17.151Z">
+<meta property="article:modified_time" content="2024-09-05T08:24:08.014Z">
 <meta property="article:author" content="QinYU">
 <meta property="article:tag" content="Linear attention">
 <meta property="article:tag" content="Transformers">
@@ -490,10 +490,10 @@ A_{dot}=\mathrm{softmax}\left(\frac{QK^{T}}{\sqrt{d_{k}}}\right)V.
 <p>Compressive
 Memory是Infini-attention的核心模块，用于存储全局的上下文信息。其运行机制包括<strong>Memory
 Retrieve</strong>、<strong>Long-term context
-injection</strong>和<strong>Memory Update</strong>三个步骤。 #### 2.3.1
-Memory Retrieve
-为了检索压缩记忆中的有效信息，Infini-attention使用当前片段的query <span
-class="math inline">\(Q \in \mathbb{R}^{N \times
+injection</strong>和<strong>Memory Update</strong>三个步骤。</p>
+<h4 id="memory-retrieve">2.3.1 Memory Retrieve</h4>
+<p>为了检索压缩记忆中的有效信息，Infini-attention使用当前片段的query
+<span class="math inline">\(Q \in \mathbb{R}^{N \times
 d_{key}}\)</span>去检索记忆<span
 class="math inline">\(M_{s-1}\in\mathbb{R}^{d_{key}\times
 d_{value}}\)</span>，得到检索结果<span
