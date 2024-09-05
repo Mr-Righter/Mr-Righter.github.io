@@ -26,7 +26,7 @@
 <meta property="og:image" content="https://pic.qinyu.space/image/20240904135423.png">
 <meta property="og:image" content="https://pic.qinyu.space/image/20240904141912.png">
 <meta property="article:published_time" content="2024-09-05T07:32:17.000Z">
-<meta property="article:modified_time" content="2024-09-05T08:32:41.027Z">
+<meta property="article:modified_time" content="2024-09-05T08:37:53.523Z">
 <meta property="article:author" content="QinYU">
 <meta property="article:tag" content="Linear attention">
 <meta property="article:tag" content="Transformers">
@@ -557,7 +557,7 @@ Auto-regressive Attention，文中使用了一些kenel
 trick的方法来代替全局<span
 class="math inline">\(\text{softmax}\)</span>的计算，但这并不是一个新概念，围绕的Linear
 attention的研究已经有很多。下面来论证为什么Infini-attention是Linear
-Auto-regressive Attention。</p>
+Auto-regressive Attention的变体。</p>
 <p>对于Scaled-Dot Attention，其形式为： <span class="math display">\[
 Attention(Q,K,V)=\text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V.
 \]</span> <span class="math inline">\(QK^{\top}\)</span>得到一个<span
